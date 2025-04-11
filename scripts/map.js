@@ -21,7 +21,7 @@ myFunctionHolder.pointToEllipse = function (row) {
   }
   const major = parseFloat(row.DIAM_ELLI_MAJOR_IMG) * 1000;
   const minor = parseFloat(row.DIAM_ELLI_MINOR_IMG) * 1000;
-  const angle = parseFloat(row.DIAM_ELLI_ANGLE_IMG); // in degrees
+  const angle = parseFloat(row.DIAM_ELLI_ANGLE_IMG) + 90; // in degrees
   const ellipse = L.ellipse([lat, lng], [major, minor], angle, {
     color: "black",
     fillColor: "red",
@@ -58,4 +58,3 @@ window.onload = function () {
     mapObject.fitBounds(ellipseGroup.getBounds());
   });
 };
-
