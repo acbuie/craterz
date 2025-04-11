@@ -9,7 +9,10 @@
   <link rel="stylesheet" href="styles/mycss.css">
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/dc@4.2.4/dist/style/dc.min.css">
   <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://unpkg.com/crossfilter2@1.5.4/crossfilter.min.js"></script>
+  <script src="https://unpkg.com/dc@4.2.4/dist/dc.min.js"></script>
   <script src="libraries/leaflet/leaflet.js"></script>
   <script src="libraries/leaflet/l.ellipse.js"></script>
   <script src="scripts/map.js"></script>
@@ -19,11 +22,11 @@
 <body>
   <div id="title">Mars Global Crater Database</div> <!-- Dedicated title section -->
   <div id="map-container">
-    
+
     <div id="map"></div> <!-- Map container -->
   </div>
 
-  <div id="table">Tables</div>
+  <table class="dc-data-table" id="table"></table>
   <div id="chart">Charts</div>
   <!-- Leaflet JavaScript -->
 
