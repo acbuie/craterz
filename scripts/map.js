@@ -38,6 +38,7 @@ window.onload = function () {
     "http://s3-eu-west-1.amazonaws.com/whereonmars.cartodb.net/viking_mdim21_global/{z}/{x}/{y}.png",
     {
       tms: true,
+      maxNativeZoom: 7,
       attribution:
         "&copy; <a href=”https://www.openplanetary.org/opm-basemaps/global-viking-mdim2-1-colorized-mosaic”>OpenPlanetary</a>",
     },
