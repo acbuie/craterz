@@ -10,6 +10,7 @@ var myFunctionHolder = {};
 //   }
 // }
 
+
 //declaring function pointToCircle
 myFunctionHolder.pointToEllipse = function (row) {
   const lat = parseFloat(row.LAT_ELLI_IMG);
@@ -31,6 +32,13 @@ myFunctionHolder.pointToEllipse = function (row) {
   return ellipse;
 };
 
+myFunctionHolder.popup = function (row) {
+  const crater_id = row.CRATER_ID;
+  const int_morph1 = row.INT_MORPH1;
+  const popup_text = `Crater ID: ${crater_id}<br>Int Morph 1: ${int_morph1}`;
+  return popup_text;
+}
+
 window.onload = function () {
   // window.onload allows for the map to load after the page has loaded
   let mapObject = L.map("map").setView([0, 0], 2); // global view
@@ -43,16 +51,19 @@ window.onload = function () {
         "&copy; <a href=”https://www.openplanetary.org/opm-basemaps/global-viking-mdim2-1-colorized-mosaic”>OpenPlanetary</a>",
     },
   );
-  // let baseMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //     maxZoom: 19,
-  //     attribution: '&copy; OpenStreetMap contributors'
-  // });
+
   baseMap.addTo(mapObject);
 
   d3.csv("data/sample.csv").then(function (data) {
     const ellipseGroup = L.layerGroup();
+    // Sort so larger ellipses are added first, smaller ones on top
+    // So that overlapped small craters will still have popups. 
+    data.sort((a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG));
+    
     data.forEach(function (row) {
       const ellipse = myFunctionHolder.pointToEllipse(row);
+      const popup_text = myFunctionHolder.popup(row);
+      ellipse.bindPopup(popup_text);
       ellipseGroup.addLayer(ellipse);
     });
     ellipseGroup.addTo(mapObject);
