@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-   <!-- #\ <h1>Interactive map</h1> -->
+  <!-- #\ <h1>Interactive map</h1> -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Webpage Layout with Leaflet</title>
   <link rel="stylesheet" href="styles/mycss.css">
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-</head>
-<body>
-    <div id="title">Mars Global Crater Database</div> <!-- Dedicated title section -->
-  <div id="filter">Filters</div>
-  <div id="map-container">
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="libraries/leaflet/leaflet.js"></script>
+  <script src="libraries/leaflet/l.ellipse.js"></script>
+  <script src="scripts/map.js"></script>
 
+</head>
+
+<body>
+  <div id="title">Mars Global Crater Database</div> <!-- Dedicated title section -->
+  <div id="map-container">
+    
     <div id="map"></div> <!-- Map container -->
   </div>
-  
+
   <div id="table">Tables</div>
   <div id="chart">Charts</div>
   <!-- Leaflet JavaScript -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="scripts/myscript.js"></script>
+
+
+
+
 </body>
+
 </html>

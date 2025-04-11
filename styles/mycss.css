@@ -37,7 +37,9 @@ body {
   
   #map {
     flex-grow: 1;
-    background-color: #d0e7f9;
+    /* background-color: #d0e7f9; */
+    height: 100%;
+    width: 100%;
   }
   
   #table {
