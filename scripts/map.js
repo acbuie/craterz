@@ -10,7 +10,6 @@ var myFunctionHolder = {};
 //   }
 // }
 
-
 //declaring function pointToCircle
 myFunctionHolder.pointToEllipse = function (row) {
   const lat = parseFloat(row.LAT_ELLI_IMG);
@@ -32,13 +31,13 @@ myFunctionHolder.pointToEllipse = function (row) {
   return ellipse;
 };
 
-
 myFunctionHolder.popup = function (row) {
   const crater_id = row.CRATER_ID;
   const int_morph1 = row.INT_MORPH1;
-  const popup_text = `Crater ID: ${crater_id}<br>Int Morph 1: ${int_morph1}`;
+  const diameter = row.DIAM_CIRC_IMG;
+  const popup_text = `Crater ID: ${crater_id}<br>Int Morph 1: ${int_morph1}<br>Diameter: ${diameter}`;
   return popup_text;
-}
+};
 
 window.onload = function () {
   // Create and configure the Leaflet map
@@ -51,20 +50,26 @@ window.onload = function () {
       maxNativeZoom: 7,
       attribution:
         '&copy; <a href="https://www.openplanetary.org/opm-basemaps/global-viking-mdim2-1-colorized-mosaic">OpenPlanetary</a>',
-    }
+    },
   );
 
   baseMap.addTo(mapObject);
 
   // Load crater data
-  d3.csv("data/sample.csv").then(function (data) {
+  d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     const ellipseGroup = L.layerGroup();
 
+    data = data.filter((d) => {
+      return d.DIAM_CIRC_IMG >= 50;
+    });
+
     // Sort largest to smallest so small craters appear on top
-    data.sort((a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG));
+    data.sort(
+      (a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG),
+    );
 
     // Draw ellipses and bind popup
-    const enrichedData = data.map(row => {
+    const enrichedData = data.map((row) => {
       const ellipse = myFunctionHolder.pointToEllipse(row);
       const popup_text = myFunctionHolder.popup(row);
       ellipse.bindPopup(popup_text);
@@ -78,7 +83,7 @@ window.onload = function () {
 
     // Crossfilter + DC setup
     let ndx = crossfilter(enrichedData);
-    let allDim = ndx.dimension(d => d);
+    let allDim = ndx.dimension((d) => d);
 
     let craterTable = dc.dataTable("#table");
     craterTable
@@ -86,14 +91,14 @@ window.onload = function () {
       .group(() => "")
       .size(6)
       .columns([
-        { label: "Crater ID", format: d => d.CRATER_ID },
-        { label: "Longitude", format: d => d.LON_ELLI_IMG },
-        { label: "Latitude", format: d => d.LAT_ELLI_IMG },
-        { label: "Morphology", format: d => d.INT_MORPH1 }
+        { label: "Crater ID", format: (d) => d.CRATER_ID },
+        { label: "Longitude", format: (d) => d.LON_ELLI_IMG },
+        { label: "Latitude", format: (d) => d.LAT_ELLI_IMG },
+        { label: "Morphology", format: (d) => d.INT_MORPH1 },
       ])
-      .sortBy(d => d.DIAM_CIRC_IMG)
+      .sortBy((d) => d.DIAM_CIRC_IMG)
       .order(d3.descending)
-      .on('postRender', function () {
+      .on("postRender", function () {
         d3.selectAll("#table .dc-table-row").on("click", function (event, d) {
           console.log("Clicked row:", d);
           console.log("Ellipse attached?", d._leafletEllipse);
