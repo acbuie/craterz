@@ -99,12 +99,10 @@ window.onload = function () {
       .sortBy((d) => d.DIAM_CIRC_IMG)
       .order(d3.descending)
       .on("postRender", function () {
-        d3.selectAll("#table .dc-table-row").on("click", function (event, d) {
-          console.log("Clicked row:", d);
-          console.log("Ellipse attached?", d._leafletEllipse);
-          const ellipse = d._leafletEllipse;
+        d3.selectAll("#table .dc-table-row").on("click", (event) => {
+          const ellipse = event._leafletEllipse;
           if (ellipse) {
-            mapObject.setView(ellipse.getBounds().getCenter(), 10);
+            mapObject.fitBounds(ellipse.getBounds());
             ellipse.openPopup();
           }
         });
