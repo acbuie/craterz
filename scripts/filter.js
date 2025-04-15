@@ -42,7 +42,16 @@ var FilterSettings = {
 // Filters; Must take `d` as first arg and filterSettings as second arg
 
 function coords() {}
+
 function diameter(d, filterSettings) {
+  if (filterSettings.Diameter.Min ^ filterSettings.Diameter.Max) {
+    if (filterSettings.Diameter.Min) {
+      return d.DIAM_CIRC_IMG >= filterSettings.Diameter.Min;
+    } else {
+      return d.DIAM_CIRC_IMG <= filterSettings.Diameter.Max;
+    }
+  }
+
   return (
     d.DIAM_CIRC_IMG >= filterSettings.Diameter.Min &&
     d.DIAM_CIRC_IMG <= filterSettings.Diameter.Max

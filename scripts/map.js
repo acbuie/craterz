@@ -95,7 +95,7 @@ window.onload = function () {
     // Filter data
     // Currently both Min and Max must be set
     FilterSettings.Diameter.Min = 40;
-    FilterSettings.Diameter.Max = 1000;
+    // FilterSettings.Diameter.Max = 1000;
     // FilterSettings.Interior.Crater = "FF";
 
     // Check if the filter has been set
