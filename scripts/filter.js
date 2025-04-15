@@ -39,9 +39,10 @@ var FilterSettings = {
   },
 };
 
-function Coords() {}
+// Filters; Must take `d` as first arg and filterSettings as second arg
 
-function Diameter(d, filterSettings) {
+function coords() {}
+function diameter(d, filterSettings) {
   return (
     d.DIAM_CIRC_IMG >= filterSettings.Diameter.Min &&
     d.DIAM_CIRC_IMG <= filterSettings.Diameter.Max
@@ -49,47 +50,38 @@ function Diameter(d, filterSettings) {
 }
 
 // Ejecta filters
-function EjectaLayers() {}
-function EjectaMorph() {}
-function EjectaLayerMorph() {}
-function EjectaTextureShape() {}
-function EjectaNotes() {}
+function ejectaLayers() {}
+function ejectaMorph() {}
+function ejectaLayerMorph() {}
+function ejectaTextureShape() {}
+function ejectaNotes() {}
 
 // Interior filters
-function InteriorCrater(d, filterSettings) {
+function interiorCrater(d, filterSettings) {
   if (d.INT_MORPH1 === null) {
     return false;
   }
   return d.INT_MORPH1.includes(filterSettings.Interior.Crater);
 }
-function InteriorWall() {}
-function InteriorFloor() {}
+function interiorWall() {}
+function interiorFloor() {}
 
-function Confidence() {}
-function Notes() {}
+function confidence() {}
+function notes() {}
 
-function DegRim() {}
-function DegWall() {}
-function DegFloor() {}
-
-// NOTE: Main filter function
-// Add new filters to this array. Must follow the function signature as shown above
-
-// TODO: Skip filter if FilterSettings set to null
-// We will do this by only adding filters to Filters array if the FilterSettings has info
-// Will probably need lookup table
-
-// var Filters = [Diameter, InteriorCrater];
+function degRim() {}
+function degWall() {}
+function degFloor() {}
 
 function getFilters(filterSettings) {
   let filters = [];
 
   if (filterSettings.Diameter.Min || filterSettings.Diameter.Max) {
-    filters.push(Diameter);
+    filters.push(diameter);
   }
 
   if (filterSettings.Interior.Crater) {
-    filters.push(InteriorCrater);
+    filters.push(interiorCrater);
   }
 
   return filters;
