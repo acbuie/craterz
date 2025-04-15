@@ -11,6 +11,26 @@ var myFunctionHolder = {};
 // }
 
 //declaring function pointToCircle
+
+myFunctionHolder.setDefaultEllipseStyle = function (ellipse) {
+  ellipse.setStyle({
+    color: "black",
+    fillColor: "red",
+    weight: 1,
+    fillOpacity: 0.1,
+  });
+};
+
+myFunctionHolder.setSelectedEllipseStyle = function (ellipse) {
+  ellipse.setStyle({
+    color: "#1c75bc",
+    fillColor: "#4da6ff",
+    weight: 4,
+    fillOpacity: 0,
+  });
+};
+
+
 myFunctionHolder.pointToEllipse = function (row) {
   const lat = parseFloat(row.LAT_ELLI_IMG);
   let lng;
@@ -19,15 +39,11 @@ myFunctionHolder.pointToEllipse = function (row) {
   } else {
     lng = parseFloat(row.LON_ELLI_IMG);
   }
-  const major = parseFloat(row.DIAM_ELLI_MAJOR_IMG) * 1000;
-  const minor = parseFloat(row.DIAM_ELLI_MINOR_IMG) * 1000;
+  const major = parseFloat(row.DIAM_ELLI_MAJOR_IMG) * 1000; // km to m
+  const minor = parseFloat(row.DIAM_ELLI_MINOR_IMG) * 1000; // km to m
   const angle = parseFloat(row.DIAM_ELLI_ANGLE_IMG) + 90; // in degrees
-  const ellipse = L.ellipse([lat, lng], [major, minor], angle, {
-    color: "black",
-    fillColor: "red",
-    weight: 1,
-    fillOpacity: 0.1,
-  });
+  const ellipse = L.ellipse([lat, lng], [major, minor], angle);
+  myFunctionHolder.setDefaultEllipseStyle(ellipse); // Set default style
   return ellipse;
 };
 
@@ -37,6 +53,24 @@ myFunctionHolder.popup = function (row) {
   const diameter = row.DIAM_CIRC_IMG;
   const popup_text = `Crater ID: ${crater_id}<br>Int Morph 1: ${int_morph1}<br>Diameter: ${diameter}`;
   return popup_text;
+};
+
+let pageSize = 5;
+let currentPage = 0;
+
+myFunctionHolder.displayPage = function (pageIndex) {
+  const offset = pageIndex * pageSize;
+  const craterTable = myFunctionHolder.craterTable;
+  craterTable.beginSlice(offset);
+  craterTable.endSlice(offset + pageSize);
+  dc.redrawAll();
+  myFunctionHolder.updatePageInfo();
+};
+
+myFunctionHolder.updatePageInfo = function () {
+  const offset = currentPage * pageSize;
+  const pageText = `Showing rows ${offset + 1}–${offset + pageSize}`;
+  document.getElementById("page-info").textContent = pageText;
 };
 
 window.onload = function () {
@@ -60,7 +94,7 @@ window.onload = function () {
     const ellipseGroup = L.layerGroup();
 
     data = data.filter((d) => {
-      return d.DIAM_CIRC_IMG >= 50;
+      return d.DIAM_CIRC_IMG >= 15;
     });
 
     // Sort largest to smallest so small craters appear on top
@@ -84,12 +118,14 @@ window.onload = function () {
     // Crossfilter + DC setup
     let ndx = crossfilter(enrichedData);
     let allDim = ndx.dimension((d) => d);
+    let selectedEllipse = null;
 
-    let craterTable = dc.dataTable("#table");
-    craterTable
+    myFunctionHolder.craterTable = dc.dataTable("#table");
+    myFunctionHolder.craterTable
       .dimension(allDim)
       .group(() => "")
-      .size(6)
+      .showGroups(false) // Gets rid of group header, which is unnecessary right now,  but might be useful later
+      .size(Infinity)
       .columns([
         { label: "Crater ID", format: (d) => d.CRATER_ID },
         { label: "Longitude", format: (d) => d.LON_ELLI_IMG },
@@ -99,15 +135,42 @@ window.onload = function () {
       .sortBy((d) => d.DIAM_CIRC_IMG)
       .order(d3.descending)
       .on("postRender", function () {
-        d3.selectAll("#table .dc-table-row").on("click", (event) => {
+        setTimeout(() => {
+        d3.selectAll(".dc-table-row").on("click", (event) => {
           const ellipse = event._leafletEllipse;
           if (ellipse) {
-            mapObject.fitBounds(ellipse.getBounds());
+            if (selectedEllipse) {
+              myFunctionHolder.setDefaultEllipseStyle(selectedEllipse); // Reset previous selection
+            }
+            myFunctionHolder.setSelectedEllipseStyle(ellipse); // Set new selection style
+            mapObject.fitBounds(ellipse.getBounds(), {
+              padding: [100, 100]
+            });
             ellipse.openPopup();
+            selectedEllipse = ellipse; // Update the selected ellipse
           }
         });
-      });
+      }, 0); // delay just long enough for rows to appear
+    });
+    
+      // Render first page of table
 
     dc.renderAll();
+    myFunctionHolder.displayPage(0);
+
+  });
+
+  // Set up pagination controls
+  document.getElementById("prev").addEventListener("click", () => {
+    if (currentPage > 0) {
+      currentPage--;
+      myFunctionHolder.displayPage(currentPage);
+    }
+  });
+
+  document.getElementById("next").addEventListener("click", () => {
+    currentPage++;
+    myFunctionHolder.displayPage(currentPage);
   });
 };
+
