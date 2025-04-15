@@ -1,4 +1,4 @@
-"use strict"; // JS strict mode
+("use strict"); // JS strict mode
 
 var myFunctionHolder = {};
 
@@ -29,7 +29,6 @@ myFunctionHolder.setSelectedEllipseStyle = function (ellipse) {
     fillOpacity: 0,
   });
 };
-
 
 myFunctionHolder.pointToEllipse = function (row) {
   const lat = parseFloat(row.LAT_ELLI_IMG);
@@ -93,9 +92,23 @@ window.onload = function () {
   d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     const ellipseGroup = L.layerGroup();
 
-    data = data.filter((d) => {
-      return d.DIAM_CIRC_IMG >= 15;
-    });
+    // Filter data
+    // Currently both Min and Max must be set
+    FilterSettings.Diameter.Min = 40;
+    // FilterSettings.Diameter.Max = 1000;
+    // FilterSettings.Interior.Crater = "FF";
+
+    // Check if the filter has been set
+    let updated = !Object.values(flatten(FilterSettings)).every(
+      (o) => o === "",
+    );
+
+    if (updated) {
+      console.log("Updated filter");
+      data = data.filter((d) => {
+        return FilterData(d, FilterSettings);
+      });
+    }
 
     // Sort largest to smallest so small craters appear on top
     data.sort(
@@ -136,28 +149,27 @@ window.onload = function () {
       .order(d3.descending)
       .on("postRender", function () {
         setTimeout(() => {
-        d3.selectAll(".dc-table-row").on("click", (event) => {
-          const ellipse = event._leafletEllipse;
-          if (ellipse) {
-            if (selectedEllipse) {
-              myFunctionHolder.setDefaultEllipseStyle(selectedEllipse); // Reset previous selection
+          d3.selectAll(".dc-table-row").on("click", (event) => {
+            const ellipse = event._leafletEllipse;
+            if (ellipse) {
+              if (selectedEllipse) {
+                myFunctionHolder.setDefaultEllipseStyle(selectedEllipse); // Reset previous selection
+              }
+              myFunctionHolder.setSelectedEllipseStyle(ellipse); // Set new selection style
+              mapObject.fitBounds(ellipse.getBounds(), {
+                padding: [100, 100],
+              });
+              ellipse.openPopup();
+              selectedEllipse = ellipse; // Update the selected ellipse
             }
-            myFunctionHolder.setSelectedEllipseStyle(ellipse); // Set new selection style
-            mapObject.fitBounds(ellipse.getBounds(), {
-              padding: [100, 100]
-            });
-            ellipse.openPopup();
-            selectedEllipse = ellipse; // Update the selected ellipse
-          }
-        });
-      }, 0); // delay just long enough for rows to appear
-    });
-    
-      // Render first page of table
+          });
+        }, 0); // delay just long enough for rows to appear
+      });
+
+    // Render first page of table
 
     dc.renderAll();
     myFunctionHolder.displayPage(0);
-
   });
 
   // Set up pagination controls
@@ -173,4 +185,3 @@ window.onload = function () {
     myFunctionHolder.displayPage(currentPage);
   });
 };
-
