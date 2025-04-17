@@ -25,8 +25,23 @@
     <!-- Dedicated title section -->
 
     <div id="filter-container">
-      <div id="diameter">Diameter</div>
-      <div id="shape">Eccentricity</div>
+      <div class="filter-group">
+        <div class="filter-header">Shape</div>
+        <div class="filter-content">
+          <div class="filter-row">
+            Diameter
+            <div class="slider" id="diameter-slider"></div>
+          </div>
+          <div class="filter-row">
+            Eccentricity
+            <div id="eccen-slider">Eccentricity Slider</div>
+          </div>
+          <div class="filter-row">
+            Ellipticity
+            <div id="ellip-slider">Ellipticity Slider</div>
+          </div>
+        </div>
+      </div>
       <div id="ejecta">Ejecta</div>
       <div id="interior">Interior</div>
       <div id="degradation">Degradation</div>
@@ -51,6 +66,7 @@
 
     <!-- These should be loaded last -->
     <script src="scripts/utils.js"></script>
+    <script src="scripts/slider.js"></script>
     <script src="scripts/filter.js"></script>
     <script src="scripts/map.js"></script>
   </body>
