@@ -18,6 +18,16 @@ var FilterSettings = {
     Min: "",
     Max: "",
   },
+  Ellipse: {
+    Eccen: {
+      Min: "",
+      Max: "",
+    },
+    Ellip: {
+      Min: "",
+      Max: "",
+    },
+  },
   Ejecta: {
     Layers: "",
     Morph: "", // EJECTA_MORPH_1
@@ -44,6 +54,7 @@ var FilterSettings = {
 function coords() {}
 
 function diameter(d, filterSettings) {
+  // Allow for only one of mix or max to be set
   if (filterSettings.Diameter.Min ^ filterSettings.Diameter.Max) {
     if (filterSettings.Diameter.Min) {
       return d.DIAM_CIRC_IMG >= filterSettings.Diameter.Min;
@@ -55,6 +66,35 @@ function diameter(d, filterSettings) {
   return (
     d.DIAM_CIRC_IMG >= filterSettings.Diameter.Min &&
     d.DIAM_CIRC_IMG <= filterSettings.Diameter.Max
+  );
+}
+
+function ellipseEccen(d, filterSettings) {
+  if (filterSettings.Ellipse.Eccen.Min ^ filterSettings.Ellipse.Eccen.Max) {
+    if (filterSettings.Ellipse.Eccen.Min) {
+      return d.ELLI_ECCEN_IMG >= filterSettings.Ellipse.Eccen.Min;
+    } else {
+      return d.ELLI_ECCEN_IMG <= filterSettings.Ellipse.Eccen.Max;
+    }
+  }
+
+  return (
+    d.ELLI_ECCEN_IMG >= filterSettings.Ellipse.Eccen.Min &&
+    d.ELLI_ECCEN_IMG <= filterSettings.Ellipse.Eccen.Max
+  );
+}
+function ellipseEllip(d, filterSettings) {
+  if (filterSettings.Ellipse.Ellip.Min ^ filterSettings.Ellipse.Ellip.Max) {
+    if (filterSettings.Ellipse.Ellip.Min) {
+      return d.ELLI_ELLIP_IMG >= filterSettings.Ellipse.Ellip.Min;
+    } else {
+      return d.ELLI_ELLIP_IMG <= filterSettings.Ellipse.Ellip.Max;
+    }
+  }
+
+  return (
+    d.ELLI_ELLIP_IMG >= filterSettings.Ellipse.Ellip.Min &&
+    d.ELLI_ELLIP_IMG <= filterSettings.Ellipse.Ellip.Max
   );
 }
 
