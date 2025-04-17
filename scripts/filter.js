@@ -154,3 +154,10 @@ function FilterData(d, filterSettings) {
 
   return validRow;
 }
+
+function updateFilterSettings(filterSettings) {
+  [filterSettings.Diameter.Min, FilterSettings.Diameter.Max] =
+    diameterSlider.noUiSlider.get(true);
+  [filterSettings.Ellipse.Eccen.Min, FilterSettings.Ellipse.Eccen.Max] =
+    eccenSlider.noUiSlider.get(true);
+}
