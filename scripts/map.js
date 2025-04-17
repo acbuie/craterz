@@ -92,23 +92,22 @@ window.onload = function () {
   d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     const ellipseGroup = L.layerGroup();
 
-    // Filter data
-    // Currently both Min and Max must be set
-    FilterSettings.Diameter.Min = 40;
-    // FilterSettings.Diameter.Max = 1000;
-    // FilterSettings.Interior.Crater = "FF";
+    // Button click
+    document
+      .getElementById("filter-update")
+      .addEventListener("click", function () {
+        // Update settings
+        // TODO: Check for changes?
+        updateFilterSettings(FilterSettings);
+        console.log(FilterSettings);
 
-    // Check if the filter has been set
-    let updated = !Object.values(flatten(FilterSettings)).every(
-      (o) => o === "",
-    );
+        // Filter
+        data = data.filter((d) => {
+          return FilterData(d, FilterSettings);
+        });
 
-    if (updated) {
-      console.log("Updated filter");
-      data = data.filter((d) => {
-        return FilterData(d, FilterSettings);
+        // Need to redraw map and table here
       });
-    }
 
     // Sort largest to smallest so small craters appear on top
     data.sort(

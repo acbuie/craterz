@@ -1,0 +1,110 @@
+body {
+  display: grid;
+  grid-template-rows: 5% 20% 45% 30%; /* Add a row for the title */
+  grid-template-columns: 20% 40% 40%; /* Maintain three columns */
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  outline: 2px solid lime;
+}
+
+#title {
+  grid-row: 1; /* Title occupies the first row */
+  grid-column: 1 / span 3; /* Title spans all three columns */
+  background-color: #fff; /* Optional: background for title */
+  text-align: left;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333; /* Text color */
+  border-bottom: 1px solid #ccc; /* Optional: separator line */
+}
+
+#filter-container {
+  grid-row: 2 / span 3;
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.filter-content {
+  padding-left: 10px;
+}
+
+.filter-row {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  & .slider {
+    width: 150px;
+  }
+}
+
+#map-container {
+  grid-row: 2 / span 2; /* Map occupies second and third rows */
+  grid-column: 2 / span 2;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+#map {
+  flex-grow: 1;
+  /* background-color: #d0e7f9; */
+  /* height: 100%;
+    width: 100%; */
+}
+
+#chart {
+  grid-row: 4;
+  grid-column: 3;
+  background-color: #e8f5e9;
+}
+
+.dc-table-group {
+  visibility: collapse;
+}
+
+#table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fdf5e6;
+  font-family: Arial, sans-serif;
+}
+
+#table th,
+#table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+#table tbody tr:hover {
+  background-color: #f0f8ff;
+  cursor: pointer;
+}
+
+#table-container {
+  grid-row: 4;
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  background-color: #fdf5e6;
+  max-height: 400px;
+  overflow-y: auto;
+  border: 2px dashed red; /* for debugging visibility */
+}
+
+#pagination {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #fff;
+}
