@@ -51,7 +51,7 @@ var FilterSettings = {
 
 // Filters; Must take `d` as first arg and filterSettings as second arg
 
-function coords() {}
+function coords(d, filterSettings) {}
 
 function diameter(d, filterSettings) {
   // Allow for only one of mix or max to be set
@@ -99,11 +99,11 @@ function ellipseEllip(d, filterSettings) {
 }
 
 // Ejecta filters
-function ejectaLayers() {}
-function ejectaMorph() {}
-function ejectaLayerMorph() {}
-function ejectaTextureShape() {}
-function ejectaNotes() {}
+function ejectaLayers(d, filterSettings) {}
+function ejectaMorph(d, filterSettings) {}
+function ejectaLayerMorph(d, filterSettings) {}
+function ejectaTextureShape(d, filterSettings) {}
+function ejectaNotes(d, filterSettings) {}
 
 // Interior filters
 function interiorCrater(d, filterSettings) {
@@ -112,15 +112,15 @@ function interiorCrater(d, filterSettings) {
   }
   return d.INT_MORPH1.includes(filterSettings.Interior.Crater);
 }
-function interiorWall() {}
-function interiorFloor() {}
+function interiorWall(d, filterSettings) {}
+function interiorFloor(d, filterSettings) {}
 
-function confidence() {}
-function notes() {}
+function confidence(d, filterSettings) {}
+function notes(d, filterSettings) {}
 
-function degRim() {}
-function degWall() {}
-function degFloor() {}
+function degRim(d, filterSettings) {}
+function degWall(d, filterSettings) {}
+function degFloor(d, filterSettings) {}
 
 function getFilters(filterSettings) {
   let filters = [];
