@@ -57,11 +57,14 @@ myFunctionHolder.popup = function (row) {
 let pageSize = 5;
 let currentPage = 0;
 
+myFunctionHolder.allDim = {};
+
 myFunctionHolder.displayPage = function (pageIndex) {
   const offset = pageIndex * pageSize;
-  const craterTable = myFunctionHolder.craterTable;
-  craterTable.beginSlice(offset);
-  craterTable.endSlice(offset + pageSize);
+  const pageData = myFunctionHolder.enrichedData.slice(offset, offset + pageSize); // ✅
+
+  myFunctionHolder.allDim.filterFunction(d => pageData.includes(d)); // ✅ filter manually
+
   dc.redrawAll();
   myFunctionHolder.updatePageInfo();
 };
@@ -71,7 +74,7 @@ myFunctionHolder.updatePageInfo = function () {
   const pageText = `Showing rows ${offset + 1}–${offset + pageSize}`;
   document.getElementById("page-info").textContent = pageText;
 };
-
+myFunctionHolder.ellipseMap = {};
 window.onload = function () {
   // Create and configure the Leaflet map
   let mapObject = L.map("map").setView([0, 0], 2); // global view
@@ -120,8 +123,9 @@ window.onload = function () {
       const popup_text = myFunctionHolder.popup(row);
       ellipse.bindPopup(popup_text);
       ellipseGroup.addLayer(ellipse);
+      myFunctionHolder.ellipseMap[row.CRATER_ID] = ellipse;
 
-      return { ...row, _leafletEllipse: ellipse }; // Attach the ellipse to the row for later reference
+      return row;
     });
 
     ellipseGroup.addTo(mapObject);
@@ -133,8 +137,12 @@ window.onload = function () {
     let selectedEllipse = null;
 
     myFunctionHolder.craterTable = dc.dataTable("#table");
+
+    myFunctionHolder.enrichedData = enrichedData;
+    myFunctionHolder.allDim = allDim;
+
     myFunctionHolder.craterTable
-      .dimension(allDim)
+      .dimension(myFunctionHolder.allDim)
       .group(() => "")
       .showGroups(false) // Gets rid of group header, which is unnecessary right now,  but might be useful later
       .size(Infinity)
@@ -146,25 +154,25 @@ window.onload = function () {
       ])
       .sortBy((d) => d.DIAM_CIRC_IMG)
       .order(d3.descending)
-      .on("postRender", function () {
+      .on("renderlet", function () {
         setTimeout(() => {
-          d3.selectAll(".dc-table-row").on("click", (event) => {
-            const ellipse = event._leafletEllipse;
+          const rows = d3.selectAll(".dc-table-row");      
+          rows.on("click", function () {
+            const cells = d3.select(this).selectAll("td").nodes();
+            const craterId = cells[0]?.textContent?.trim();      
+            const ellipse = myFunctionHolder.ellipseMap[craterId];
             if (ellipse) {
               if (selectedEllipse) {
-                myFunctionHolder.setDefaultEllipseStyle(selectedEllipse); // Reset previous selection
+                myFunctionHolder.setDefaultEllipseStyle(selectedEllipse);
               }
-              myFunctionHolder.setSelectedEllipseStyle(ellipse); // Set new selection style
-              mapObject.fitBounds(ellipse.getBounds(), {
-                padding: [100, 100],
-              });
+              myFunctionHolder.setSelectedEllipseStyle(ellipse);
+              mapObject.fitBounds(ellipse.getBounds(), { padding: [100, 100] });
               ellipse.openPopup();
-              selectedEllipse = ellipse; // Update the selected ellipse
-            }
+              selectedEllipse = ellipse;
+            } 
           });
-        }, 0); // delay just long enough for rows to appear
+        }, 0);
       });
-
     // Render first page of table
 
     dc.renderAll();
@@ -183,4 +191,7 @@ window.onload = function () {
     currentPage++;
     myFunctionHolder.displayPage(currentPage);
   });
+
 };
+
+
