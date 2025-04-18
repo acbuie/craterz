@@ -47,10 +47,19 @@ myFunctionHolder.pointToEllipse = function (row) {
 };
 
 myFunctionHolder.popup = function (row) {
-  const crater_id = row.CRATER_ID;
-  const int_morph1 = row.INT_MORPH1;
-  const diameter = row.DIAM_CIRC_IMG;
-  const popup_text = `Crater ID: ${crater_id}<br>Int Morph 1: ${int_morph1}<br>Diameter: ${diameter}`;
+  const columns = myFunctionHolder.getCraterTableColumns();
+
+  const lines = columns
+    .map(({ label, format }) => {
+      try {
+        const value = format(row);
+        return value === "NA" || value == null ? null : `<strong>${label}:</strong> ${value}`;
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean); // remove nulls
+    popup_text = lines.join("<br>")
   return popup_text;
 };
 
