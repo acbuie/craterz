@@ -92,3 +92,5 @@ function mergeTooltips(slider, threshold, separator) {
     },
   );
 }
+
+
