@@ -117,6 +117,7 @@ window.onload = function () {
     {
       tms: true,
       maxNativeZoom: 7,
+      noWrap: true, // Prevents wrapping longitudinally
       attribution:
         '&copy; <a href="https://www.openplanetary.org/opm-basemaps/global-viking-mdim2-1-colorized-mosaic">OpenPlanetary</a>',
     },
