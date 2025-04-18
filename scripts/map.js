@@ -53,13 +53,13 @@ myFunctionHolder.popup = function (row) {
     .map(({ label, format }) => {
       try {
         const value = format(row);
-        return value === "NA" || value == null ? null : `<strong>${label}:</strong> ${value}`;
+        return value === "NA" || value == null ? null : `<strong>${label}:</strong> ${value}`; // if no value for a column, don't display it. 
       } catch {
         return null;
       }
     })
     .filter(Boolean); // remove nulls
-    popup_text = lines.join("<br>")
+  popup_text = lines.join("<br>")
   return popup_text;
 };
 
@@ -69,6 +69,9 @@ let currentPage = 0;
 myFunctionHolder.allDim = {};
 
 myFunctionHolder.displayPage = function (pageIndex) {
+  const totalPages = Math.ceil(myFunctionHolder.totalRows / pageSize);
+  if (pageIndex >= totalPages) return; // Don't go beyond last page
+  if (pageIndex < 0) return; // Don't go before first page
   const offset = pageIndex * pageSize;
   const pageData = myFunctionHolder.enrichedData.slice(offset, offset + pageSize); // ✅
 
@@ -80,8 +83,12 @@ myFunctionHolder.displayPage = function (pageIndex) {
 
 myFunctionHolder.updatePageInfo = function () {
   const offset = currentPage * pageSize;
-  const pageText = `Showing rows ${offset + 1}–${offset + pageSize}`;
+  const pageText = `Showing rows ${offset + 1}–${offset + pageSize} out of ${myFunctionHolder.totalRows}`;
   document.getElementById("page-info").textContent = pageText;
+
+  const totalPages = Math.ceil(myFunctionHolder.totalRows / pageSize);
+  document.getElementById("next").disabled = currentPage + 1 >= totalPages;
+  document.getElementById("prev").disabled = currentPage === 0;
 };
 myFunctionHolder.ellipseMap = {};
 
@@ -90,29 +97,29 @@ myFunctionHolder.ellipseMap = {};
 myFunctionHolder.getCraterTableColumns = function () {
   return [
     { label: "Crater ID", format: (d) => d.CRATER_ID },
-  { label: "Lat", format: (d) => d.LAT_ELLI_IMG.toFixed(3) },
-  { label: "Lon", format: (d) => d.LON_ELLI_IMG.toFixed(3) },
-  { label: "Diameter (km)", format: (d) => d.DIAM_CIRC_IMG.toFixed(2) },
-  { label: "Eccentricity", format: (d) => d.DIAM_ELLI_ECCEN_IMG.toFixed(3) },
-  { label: "Ellipticity", format: (d) => d.DIAM_ELLI_ELLIP_IMG.toFixed(3) },
-  { label: "Angle (from North)", format: (d) => d.DIAM_ELLI_ANGLE_IMG.toFixed(1) },
+    { label: "Lat", format: (d) => d.LAT_ELLI_IMG.toFixed(3) },
+    { label: "Lon", format: (d) => d.LON_ELLI_IMG.toFixed(3) },
+    { label: "Diameter (km)", format: (d) => d.DIAM_CIRC_IMG.toFixed(2) },
+    { label: "Eccentricity", format: (d) => d.DIAM_ELLI_ECCEN_IMG.toFixed(3) },
+    { label: "Ellipticity", format: (d) => d.DIAM_ELLI_ELLIP_IMG.toFixed(3) },
+    { label: "Angle (from North)", format: (d) => d.DIAM_ELLI_ANGLE_IMG.toFixed(1) },
 
-  { label: "Ejecta Layers", format: (d) => d.LAY_NUMBER },
-  { label: "Ejecta Class", format: (d) => d.LAY_MORPH1 }, // @Aidan need a lookup table for this. 
-  { label: "Ejecta Texture", format: (d) => d.LAY_MORPH2 }, // @Aidan need a lookup table for this. 
-  { label: "Ejecta Shape", format: (d) => d.LAY_MORPH3 },
-  { label: "Ejecta Notes", format: (d) => d.LAY_NOTES },
+    { label: "Ejecta Layers", format: (d) => d.LAY_NUMBER },
+    { label: "Ejecta Class", format: (d) => d.LAY_MORPH1 }, // @Aidan need a lookup table for this. 
+    { label: "Ejecta Texture", format: (d) => d.LAY_MORPH2 }, // @Aidan need a lookup table for this. 
+    { label: "Ejecta Shape", format: (d) => d.LAY_MORPH3 },
+    { label: "Ejecta Notes", format: (d) => d.LAY_NOTES },
 
-  { label: "Crater Class", format: (d) => d.INT_MORPH1 }, // @Aidan need a lookup table for this. 
-  { label: "Wall Morph", format: (d) => d.INT_MORPH2 },
-  { label: "Floor Morph", format: (d) => d.INT_MORPH3 },
+    { label: "Crater Class", format: (d) => d.INT_MORPH1 }, // @Aidan need a lookup table for this. 
+    { label: "Wall Morph", format: (d) => d.INT_MORPH2 },
+    { label: "Floor Morph", format: (d) => d.INT_MORPH3 },
 
-  { label: "Confidence", format: (d) => d.CONF },
-  { label: "Notes", format: (d) => d.NOTES },
+    { label: "Confidence", format: (d) => d.CONF },
+    { label: "Notes", format: (d) => d.NOTES },
 
-  { label: "Rim Degradation", format: (d) => d.DEG_RIM },
-  { label: "Ejecta Degradation", format: (d) => d.DEG_EJC },
-  { label: "Floor Degradation", format: (d) => d.DEG_FLR }
+    { label: "Rim Degradation", format: (d) => d.DEG_RIM },
+    { label: "Ejecta Degradation", format: (d) => d.DEG_EJC },
+    { label: "Floor Degradation", format: (d) => d.DEG_FLR }
   ];
 };
 
@@ -183,7 +190,7 @@ window.onload = function () {
 
     myFunctionHolder.enrichedData = enrichedData;
     myFunctionHolder.allDim = allDim;
-
+    myFunctionHolder.totalRows = enrichedData.length;
     myFunctionHolder.craterTable
       .dimension(myFunctionHolder.allDim)
       .group(() => "")
@@ -194,10 +201,10 @@ window.onload = function () {
       .order(d3.descending)
       .on("renderlet", function () {
         setTimeout(() => {
-          const rows = d3.selectAll(".dc-table-row");      
+          const rows = d3.selectAll(".dc-table-row");
           rows.on("click", function () {
             const cells = d3.select(this).selectAll("td").nodes();
-            const craterId = cells[0]?.textContent?.trim();      
+            const craterId = cells[0]?.textContent?.trim();
             const ellipse = myFunctionHolder.ellipseMap[craterId];
             if (ellipse) {
               if (selectedEllipse) {
@@ -207,7 +214,7 @@ window.onload = function () {
               mapObject.fitBounds(ellipse.getBounds(), { padding: [100, 100] });
               ellipse.openPopup();
               selectedEllipse = ellipse;
-            } 
+            }
           });
         }, 0);
       });
@@ -226,8 +233,11 @@ window.onload = function () {
   });
 
   document.getElementById("next").addEventListener("click", () => {
-    currentPage++;
-    myFunctionHolder.displayPage(currentPage);
+    const totalPages = Math.ceil(myFunctionHolder.totalRows / pageSize);
+    if (currentPage + 1 < totalPages) {
+      currentPage++;
+      myFunctionHolder.displayPage(currentPage);
+    }
   });
 
 };
