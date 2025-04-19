@@ -1,3 +1,5 @@
+import { diameterSlider, ellipSlider, eccenSlider } from "./slider";
+
 const ejectaLookup = {};
 
 const interiorLookup = {
@@ -163,3 +165,5 @@ function updateFilterSettings(filterSettings) {
   [filterSettings.Ellipse.Ellip.Min, FilterSettings.Ellipse.Ellip.Max] =
     ellipSlider.noUiSlider.get(true);
 }
+
+export { updateFilterSettings };

@@ -3,7 +3,7 @@ var eccenSlider = document.getElementById("eccen-slider");
 var ellipSlider = document.getElementById("ellip-slider");
 
 noUiSlider.create(diameterSlider, {
-  start: [1, 1000],
+  start: [10, 1000],
   connect: true,
   step: 1,
   tooltips: [true, true],
@@ -40,3 +40,5 @@ noUiSlider.create(ellipSlider, {
     max: 1,
   },
 });
+
+export { diameterSlider, eccenSlider, ellipSlider };
