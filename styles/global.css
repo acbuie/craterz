@@ -23,6 +23,9 @@ strong {
   font-weight: bold;
   color: #333; /* Text color */
   border-bottom: 1px solid #ccc; /* Optional: separator line */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #filter-container {
