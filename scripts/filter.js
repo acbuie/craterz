@@ -160,4 +160,6 @@ function updateFilterSettings(filterSettings) {
     diameterSlider.noUiSlider.get(true);
   [filterSettings.Ellipse.Eccen.Min, FilterSettings.Ellipse.Eccen.Max] =
     eccenSlider.noUiSlider.get(true);
+  [filterSettings.Ellipse.Ellip.Min, FilterSettings.Ellipse.Ellip.Max] =
+    ellipSlider.noUiSlider.get(true);
 }
