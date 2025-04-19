@@ -1,9 +1,9 @@
 import {
   configureMap,
-  pointToEllipse,
-  popup,
   myFunctionHolder,
+  setDefaultEllipseStyle,
   setSelectedEllipseStyle,
+  drawEllipse,
 } from "./modules/map.mjs";
 
 import {
@@ -12,30 +12,33 @@ import {
   filterData,
 } from "./modules/filter.mjs";
 
+import {
+  formatColumnHeader,
+  displayPage,
+  updatePage,
+} from "./modules/table.mjs";
+
 ("use strict");
 
+// Setup map baselayer
 let mapObject = configureMap("map");
 
 // Load crater data
 d3.csv("data/sample.csv", d3.autoType).then(function (data) {
-  const ellipseGroup = L.layerGroup();
+  // Filter on `Update Filter` button
+  document.getElementById("filter-update").addEventListener("click", () => {
+    // Update settings
+    // TODO: Check for changes?
+    updateFilterSettings(FilterSettings);
+    console.log(FilterSettings);
 
-  // Button click
-  document
-    .getElementById("filter-update")
-    .addEventListener("click", function () {
-      // Update settings
-      // TODO: Check for changes?
-      updateFilterSettings(FilterSettings);
-      console.log(FilterSettings);
-
-      // Filter
-      data = data.filter((d) => {
-        return filterData(d, FilterSettings);
-      });
-
-      // Need to redraw map and table here
+    // Filter
+    data = data.filter((d) => {
+      return filterData(d, FilterSettings);
     });
+
+    // Need to redraw map and table here
+  });
 
   // Sort largest to smallest so small craters appear on top
   data.sort(
@@ -43,11 +46,11 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   );
 
   // Draw ellipses and bind popup
-  const enrichedData = data.map((row) => {
-    const ellipse = pointToEllipse(row);
-    const popupText = popup(row);
-    ellipse.bindPopup(popupText);
-    ellipseGroup.addLayer(ellipse);
+  const ellipseGroup = L.layerGroup();
+  data.map((row) => {
+    // Add ellipses to ellipseGroup
+    let ellipse = drawEllipse(ellipseGroup, row, formatColumnHeader());
+
     myFunctionHolder.ellipseMap[row.CRATER_ID] = ellipse;
 
     return row;
@@ -57,21 +60,21 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   // mapObject.fitBounds(ellipseGroup.getBounds());
 
   // Crossfilter + DC setup
-  let ndx = crossfilter(enrichedData);
+  let ndx = crossfilter(data);
   let allDim = ndx.dimension((d) => d);
   let selectedEllipse = null;
 
-  myFunctionHolder.craterTable = dc.dataTable("#table");
+  const craterTable = dc.dataTable("#table");
 
-  myFunctionHolder.enrichedData = enrichedData;
+  myFunctionHolder.enrichedData = data;
   myFunctionHolder.allDim = allDim;
-  myFunctionHolder.totalRows = enrichedData.length;
-  myFunctionHolder.craterTable
+
+  craterTable
     .dimension(myFunctionHolder.allDim)
     .group(() => "")
     .showGroups(false) // Gets rid of group header, which is unnecessary right now,  but might be useful later
     .size(Infinity)
-    .columns(myFunctionHolder.getCraterTableColumns())
+    .columns(formatColumnHeader())
     .sortBy((d) => d.DIAM_CIRC_IMG)
     .order(d3.descending)
     .on("renderlet", function () {
@@ -96,21 +99,28 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   // Render first page of table
 
   dc.renderAll();
-  myFunctionHolder.displayPage(0);
-});
 
-// Set up pagination controls
-document.getElementById("prev").addEventListener("click", () => {
-  if (currentPage > 0) {
-    currentPage--;
-    myFunctionHolder.displayPage(currentPage);
-  }
-});
+  // Set up pagination controls
+  const totalRows = data.length;
+  const pageSize = 25;
+  let currentPage = 0;
 
-document.getElementById("next").addEventListener("click", () => {
-  const totalPages = Math.ceil(myFunctionHolder.totalRows / pageSize);
-  if (currentPage + 1 < totalPages) {
-    currentPage++;
-    myFunctionHolder.displayPage(currentPage);
-  }
+  document.getElementById("prev").addEventListener("click", () => {
+    if (currentPage > 0) {
+      currentPage--;
+      displayPage(currentPage, totalRows, pageSize);
+      updatePage(currentPage, totalRows, pageSize);
+    }
+  });
+
+  document.getElementById("next").addEventListener("click", () => {
+    const totalPages = Math.ceil(totalRows / pageSize);
+    if (currentPage + 1 < totalPages) {
+      currentPage++;
+      displayPage(currentPage, totalRows, pageSize);
+      updatePage(currentPage, totalRows, pageSize);
+    }
+  });
+
+  displayPage(0, totalRows, pageSize);
 });
