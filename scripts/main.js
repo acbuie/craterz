@@ -92,15 +92,13 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
         });
       }, 0);
     });
-  // Render first page of table
-
-  dc.renderAll();
 
   // Set up pagination controls
   const totalRows = data.length;
   const pageSize = 25;
   let pageIndex = 0;
 
+  // Render first page of table
   displayPage(pageIndex, totalRows, pageSize);
 
   document.getElementById("prev").addEventListener("click", () => {
