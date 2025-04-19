@@ -12,11 +12,7 @@ import {
   filterData,
 } from "./modules/filter.mjs";
 
-import {
-  formatColumnHeader,
-  displayPage,
-  updatePage,
-} from "./modules/table.mjs";
+import { formatColumnHeader, displayPage } from "./modules/table.mjs";
 
 ("use strict");
 
@@ -103,24 +99,22 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   // Set up pagination controls
   const totalRows = data.length;
   const pageSize = 25;
-  let currentPage = 0;
+  let pageIndex = 0;
+
+  displayPage(pageIndex, totalRows, pageSize);
 
   document.getElementById("prev").addEventListener("click", () => {
-    if (currentPage > 0) {
-      currentPage--;
-      displayPage(currentPage, totalRows, pageSize);
-      updatePage(currentPage, totalRows, pageSize);
+    if (pageIndex > 0) {
+      pageIndex--;
+      displayPage(pageIndex, totalRows, pageSize);
     }
   });
 
   document.getElementById("next").addEventListener("click", () => {
     const totalPages = Math.ceil(totalRows / pageSize);
-    if (currentPage + 1 < totalPages) {
-      currentPage++;
-      displayPage(currentPage, totalRows, pageSize);
-      updatePage(currentPage, totalRows, pageSize);
+    if (pageIndex + 1 < totalPages) {
+      pageIndex++;
+      displayPage(pageIndex, totalRows, pageSize);
     }
   });
-
-  displayPage(0, totalRows, pageSize);
 });

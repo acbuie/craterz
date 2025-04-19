@@ -32,31 +32,25 @@ function formatColumnHeader() {
   ];
 }
 
-function updatePage(currentPage, totalRows, pageSize) {
-  const offset = currentPage * pageSize;
-  const pageText = `Showing rows ${offset + 1}–${offset + pageSize} out of ${totalRows}`;
-  document.getElementById("page-info").textContent = pageText;
-
-  const totalPages = Math.ceil(totalRows / pageSize);
-  document.getElementById("next").disabled = currentPage + 1 >= totalPages;
-  document.getElementById("prev").disabled = currentPage === 0;
-}
-
 function displayPage(pageIndex, totalRows, pageSize) {
-  // TODO: This logic can be done before the function call
-  const totalPages = Math.ceil(totalRows / pageSize);
-  if (pageIndex >= totalPages) return; // Don't go beyond last page
-  if (pageIndex < 0) return; // Don't go before first page
-
+  // Get data for page slice
   const offset = pageIndex * pageSize;
   const pageData = myFunctionHolder.enrichedData.slice(
     offset,
     offset + pageSize,
-  ); // ✅
+  );
 
-  myFunctionHolder.allDim.filterFunction((d) => pageData.includes(d)); // ✅ filter manually
+  myFunctionHolder.allDim.filterFunction((d) => pageData.includes(d));
 
   dc.redrawAll();
+
+  const pageText = `Showing rows ${offset + 1}–${offset + pageSize} out of ${totalRows}`;
+  document.getElementById("page-info").textContent = pageText;
+
+  // Disable buttons when at min/max
+  const totalPages = Math.ceil(totalRows / pageSize);
+  document.getElementById("next").disabled = pageIndex + 1 >= totalPages;
+  document.getElementById("prev").disabled = pageIndex === 0;
 }
 
-export { formatColumnHeader, displayPage, updatePage };
+export { formatColumnHeader, displayPage };
