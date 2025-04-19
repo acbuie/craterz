@@ -26,7 +26,7 @@
 
     <div id="filter-container">
       <div class="filter-group">
-        <div class="filter-header">Shape</div>
+        <strong class="filter-header">Shape</strong>
         <div class="filter-content">
           <div class="filter-row">
             Diameter
@@ -42,10 +42,40 @@
           </div>
         </div>
       </div>
-      <div id="ejecta">Ejecta</div>
-      <div id="interior">Interior</div>
-      <div id="degradation">Degradation</div>
-      <div id="misc">Misc</div>
+      <div class="filter-container">
+        <strong class="filter-header">Ejecta</strong>
+        <div class="filter-content">
+          <div class="filter-row">Layers</div>
+          <div class="filter-row">Classification</div>
+          <div class="filter-row">Texture</div>
+          <div class="filter-row">Shape</div>
+          <div class="filter-row">Notes</div>
+        </div>
+      </div>
+      <div class="filter-container">
+        <strong class="filter-header">Interior</strong>
+        <div class="filter-content">
+          <div class="filter-row">Classification</div>
+          <div class="filter-row">Wall Morphology</div>
+          <div class="filter-row">Floor Morphology</div>
+        </div>
+      </div>
+      <div class="filter-container">
+        <strong class="filter-header">Degradation</strong>
+        <div class="filter-content">
+          <div class="filter-row">Rim</div>
+          <div class="filter-row">Ejecta</div>
+          <div class="filter-row">Floor</div>
+        </div>
+      </div>
+      <div class="filter-container">
+        <strong class="filter-header">Misc</strong>
+        <div class="filter-content">
+          <div class="filter-row">Confidence</div>
+          <div class="filter-row">Notes</div>
+        </div>
+      </div>
+
       <button id="filter-update" type="submit">Update Filter</button>
     </div>
 
