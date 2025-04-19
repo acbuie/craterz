@@ -8,13 +8,18 @@ body {
   outline: 2px solid lime;
 }
 
+strong {
+  font-size: 1.125em;
+  font-weight: bold;
+}
+
 #title {
   grid-row: 1; /* Title occupies the first row */
   grid-column: 1 / span 3; /* Title spans all three columns */
   background-color: #fff; /* Optional: background for title */
   text-align: left;
   padding: 10px;
-  font-size: 18px;
+  font-size: 1.5em;
   font-weight: bold;
   color: #333; /* Text color */
   border-bottom: 1px solid #ccc; /* Optional: separator line */
