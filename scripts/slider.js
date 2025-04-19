@@ -40,7 +40,3 @@ noUiSlider.create(ellipSlider, {
     max: 1,
   },
 });
-
-mergeTooltips(diameterSlider, 30, " - ");
-mergeTooltips(eccenSlider, 30, " - ");
-mergeTooltips(ellipSlider, 30, " - ");
