@@ -2,35 +2,25 @@
 
 var myFunctionHolder = {};
 
-// //declaring function addPopups
-// myFunctionHolder.addPopups = function (feature, layer) {
-//   //this if statement used to check whether the feature has a property named "Location"
-//   if (feature.properties && feature.properties.Location) {
-//     layer.bindPopup(feature.properties.Location);
-//   }
-// }
-
-//declaring function pointToCircle
-
-myFunctionHolder.setDefaultEllipseStyle = function (ellipse) {
+function setDefaultEllipseStyle(ellipse) {
   ellipse.setStyle({
     color: "black",
     fillColor: "red",
     weight: 1,
     fillOpacity: 0.1,
   });
-};
+}
 
-myFunctionHolder.setSelectedEllipseStyle = function (ellipse) {
+function setSelectedEllipseStyle(ellipse) {
   ellipse.setStyle({
     color: "#1c75bc",
     fillColor: "#4da6ff",
     weight: 4,
     fillOpacity: 0,
   });
-};
+}
 
-myFunctionHolder.pointToEllipse = function (row) {
+function pointToEllipse(row) {
   const lat = parseFloat(row.LAT_ELLI_IMG);
   let lng;
   if (parseFloat(row.LON_ELLI_IMG) > 180) {
@@ -42,26 +32,29 @@ myFunctionHolder.pointToEllipse = function (row) {
   const minor = parseFloat(row.DIAM_ELLI_MINOR_IMG) * 1000; // km to m
   const angle = parseFloat(row.DIAM_ELLI_ANGLE_IMG) + 90; // in degrees
   const ellipse = L.ellipse([lat, lng], [major, minor], angle);
-  myFunctionHolder.setDefaultEllipseStyle(ellipse); // Set default style
+  setDefaultEllipseStyle(ellipse); // Set default style
   return ellipse;
-};
+}
 
-myFunctionHolder.popup = function (row) {
+function popup(row) {
   const columns = myFunctionHolder.getCraterTableColumns();
 
   const lines = columns
     .map(({ label, format }) => {
       try {
         const value = format(row);
-        return value === "NA" || value == null ? null : `<strong>${label}:</strong> ${value}`; // if no value for a column, don't display it. 
+        return value === "NA" || value == null
+          ? null
+          : `<strong>${label}:</strong> ${value}`; // if no value for a column, don't display it.
       } catch {
         return null;
       }
     })
     .filter(Boolean); // remove nulls
-  popup_text = lines.join("<br>")
-  return popup_text;
-};
+
+  const popupText = lines.join("<br>");
+  return popupText;
+}
 
 let pageSize = 25;
 let currentPage = 0;
@@ -73,9 +66,12 @@ myFunctionHolder.displayPage = function (pageIndex) {
   if (pageIndex >= totalPages) return; // Don't go beyond last page
   if (pageIndex < 0) return; // Don't go before first page
   const offset = pageIndex * pageSize;
-  const pageData = myFunctionHolder.enrichedData.slice(offset, offset + pageSize); // ✅
+  const pageData = myFunctionHolder.enrichedData.slice(
+    offset,
+    offset + pageSize,
+  ); // ✅
 
-  myFunctionHolder.allDim.filterFunction(d => pageData.includes(d)); // ✅ filter manually
+  myFunctionHolder.allDim.filterFunction((d) => pageData.includes(d)); // ✅ filter manually
 
   dc.redrawAll();
   myFunctionHolder.updatePageInfo();
@@ -92,7 +88,6 @@ myFunctionHolder.updatePageInfo = function () {
 };
 myFunctionHolder.ellipseMap = {};
 
-
 // Table formatting
 myFunctionHolder.getCraterTableColumns = function () {
   return [
@@ -102,15 +97,18 @@ myFunctionHolder.getCraterTableColumns = function () {
     { label: "Diameter (km)", format: (d) => d.DIAM_CIRC_IMG.toFixed(2) },
     { label: "Eccentricity", format: (d) => d.DIAM_ELLI_ECCEN_IMG.toFixed(3) },
     { label: "Ellipticity", format: (d) => d.DIAM_ELLI_ELLIP_IMG.toFixed(3) },
-    { label: "Angle (from North)", format: (d) => d.DIAM_ELLI_ANGLE_IMG.toFixed(1) },
+    {
+      label: "Angle (from North)",
+      format: (d) => d.DIAM_ELLI_ANGLE_IMG.toFixed(1),
+    },
 
     { label: "Ejecta Layers", format: (d) => d.LAY_NUMBER },
-    { label: "Ejecta Class", format: (d) => d.LAY_MORPH1 }, // @Aidan need a lookup table for this. 
-    { label: "Ejecta Texture", format: (d) => d.LAY_MORPH2 }, // @Aidan need a lookup table for this. 
+    { label: "Ejecta Class", format: (d) => d.LAY_MORPH1 }, // @Aidan need a lookup table for this.
+    { label: "Ejecta Texture", format: (d) => d.LAY_MORPH2 }, // @Aidan need a lookup table for this.
     { label: "Ejecta Shape", format: (d) => d.LAY_MORPH3 },
     { label: "Ejecta Notes", format: (d) => d.LAY_NOTES },
 
-    { label: "Crater Class", format: (d) => d.INT_MORPH1 }, // @Aidan need a lookup table for this. 
+    { label: "Crater Class", format: (d) => d.INT_MORPH1 }, // @Aidan need a lookup table for this.
     { label: "Wall Morph", format: (d) => d.INT_MORPH2 },
     { label: "Floor Morph", format: (d) => d.INT_MORPH3 },
 
@@ -119,14 +117,12 @@ myFunctionHolder.getCraterTableColumns = function () {
 
     { label: "Rim Degradation", format: (d) => d.DEG_RIM },
     { label: "Ejecta Degradation", format: (d) => d.DEG_EJC },
-    { label: "Floor Degradation", format: (d) => d.DEG_FLR }
+    { label: "Floor Degradation", format: (d) => d.DEG_FLR },
   ];
 };
 
-
-window.onload = function () {
-  // Create and configure the Leaflet map
-  let mapObject = L.map("map").setView([0, 0], 2); // global view
+function cofigureMap(id) {
+  let leafletMap = L.map(id).setView([0, 0], 2);
 
   let baseMap = L.tileLayer(
     "http://s3-eu-west-1.amazonaws.com/whereonmars.cartodb.net/viking_mdim21_global/{z}/{x}/{y}.png",
@@ -139,107 +135,109 @@ window.onload = function () {
     },
   );
 
-  baseMap.addTo(mapObject);
+  baseMap.addTo(leafletMap);
 
-  // Load crater data
-  d3.csv("data/sample.csv", d3.autoType).then(function (data) {
-    const ellipseGroup = L.layerGroup();
+  return leafletMap;
+}
 
-    // Button click
-    document
-      .getElementById("filter-update")
-      .addEventListener("click", function () {
-        // Update settings
-        // TODO: Check for changes?
-        updateFilterSettings(FilterSettings);
-        console.log(FilterSettings);
+// Main script
+let mapObject = cofigureMap("map");
 
-        // Filter
-        data = data.filter((d) => {
-          return FilterData(d, FilterSettings);
-        });
+// Load crater data
+d3.csv("data/sample.csv", d3.autoType).then(function (data) {
+  const ellipseGroup = L.layerGroup();
 
-        // Need to redraw map and table here
-      });
+  // Button click
+  // document
+  //   .getElementById("filter-update")
+  //   .addEventListener("click", function () {
+  //     // Update settings
+  //     // TODO: Check for changes?
+  //     updateFilterSettings(FilterSettings);
+  //     console.log(FilterSettings);
+  //
+  //     // Filter
+  //     data = data.filter((d) => {
+  //       return FilterData(d, FilterSettings);
+  //     });
+  //
+  //     // Need to redraw map and table here
+  //   });
 
-    // Sort largest to smallest so small craters appear on top
-    data.sort(
-      (a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG),
-    );
+  // Sort largest to smallest so small craters appear on top
+  data.sort(
+    (a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG),
+  );
 
-    // Draw ellipses and bind popup
-    const enrichedData = data.map((row) => {
-      const ellipse = myFunctionHolder.pointToEllipse(row);
-      const popup_text = myFunctionHolder.popup(row);
-      ellipse.bindPopup(popup_text);
-      ellipseGroup.addLayer(ellipse);
-      myFunctionHolder.ellipseMap[row.CRATER_ID] = ellipse;
+  // Draw ellipses and bind popup
+  const enrichedData = data.map((row) => {
+    const ellipse = pointToEllipse(row);
+    const popupText = popup(row);
+    ellipse.bindPopup(popupText);
+    ellipseGroup.addLayer(ellipse);
+    myFunctionHolder.ellipseMap[row.CRATER_ID] = ellipse;
 
-      return row;
-    });
+    return row;
+  });
 
-    ellipseGroup.addTo(mapObject);
-    // mapObject.fitBounds(ellipseGroup.getBounds());
+  ellipseGroup.addTo(mapObject);
+  // mapObject.fitBounds(ellipseGroup.getBounds());
 
-    // Crossfilter + DC setup
-    let ndx = crossfilter(enrichedData);
-    let allDim = ndx.dimension((d) => d);
-    let selectedEllipse = null;
+  // Crossfilter + DC setup
+  let ndx = crossfilter(enrichedData);
+  let allDim = ndx.dimension((d) => d);
+  let selectedEllipse = null;
 
-    myFunctionHolder.craterTable = dc.dataTable("#table");
+  myFunctionHolder.craterTable = dc.dataTable("#table");
 
-    myFunctionHolder.enrichedData = enrichedData;
-    myFunctionHolder.allDim = allDim;
-    myFunctionHolder.totalRows = enrichedData.length;
-    myFunctionHolder.craterTable
-      .dimension(myFunctionHolder.allDim)
-      .group(() => "")
-      .showGroups(false) // Gets rid of group header, which is unnecessary right now,  but might be useful later
-      .size(Infinity)
-      .columns(myFunctionHolder.getCraterTableColumns())
-      .sortBy((d) => d.DIAM_CIRC_IMG)
-      .order(d3.descending)
-      .on("renderlet", function () {
-        setTimeout(() => {
-          const rows = d3.selectAll(".dc-table-row");
-          rows.on("click", function () {
-            const cells = d3.select(this).selectAll("td").nodes();
-            const craterId = cells[0]?.textContent?.trim();
-            const ellipse = myFunctionHolder.ellipseMap[craterId];
-            if (ellipse) {
-              if (selectedEllipse) {
-                myFunctionHolder.setDefaultEllipseStyle(selectedEllipse);
-              }
-              myFunctionHolder.setSelectedEllipseStyle(ellipse);
-              mapObject.fitBounds(ellipse.getBounds(), { padding: [100, 100] });
-              ellipse.openPopup();
-              selectedEllipse = ellipse;
+  myFunctionHolder.enrichedData = enrichedData;
+  myFunctionHolder.allDim = allDim;
+  myFunctionHolder.totalRows = enrichedData.length;
+  myFunctionHolder.craterTable
+    .dimension(myFunctionHolder.allDim)
+    .group(() => "")
+    .showGroups(false) // Gets rid of group header, which is unnecessary right now,  but might be useful later
+    .size(Infinity)
+    .columns(myFunctionHolder.getCraterTableColumns())
+    .sortBy((d) => d.DIAM_CIRC_IMG)
+    .order(d3.descending)
+    .on("renderlet", function () {
+      setTimeout(() => {
+        const rows = d3.selectAll(".dc-table-row");
+        rows.on("click", function () {
+          const cells = d3.select(this).selectAll("td").nodes();
+          const craterId = cells[0]?.textContent?.trim();
+          const ellipse = myFunctionHolder.ellipseMap[craterId];
+          if (ellipse) {
+            if (selectedEllipse) {
+              setDefaultEllipseStyle(selectedEllipse);
             }
-          });
-        }, 0);
-      });
-    // Render first page of table
+            setSelectedEllipseStyle(ellipse);
+            mapObject.fitBounds(ellipse.getBounds(), { padding: [100, 100] });
+            ellipse.openPopup();
+            selectedEllipse = ellipse;
+          }
+        });
+      }, 0);
+    });
+  // Render first page of table
 
-    dc.renderAll();
-    myFunctionHolder.displayPage(0);
-  });
+  dc.renderAll();
+  myFunctionHolder.displayPage(0);
+});
 
-  // Set up pagination controls
-  document.getElementById("prev").addEventListener("click", () => {
-    if (currentPage > 0) {
-      currentPage--;
-      myFunctionHolder.displayPage(currentPage);
-    }
-  });
+// Set up pagination controls
+document.getElementById("prev").addEventListener("click", () => {
+  if (currentPage > 0) {
+    currentPage--;
+    myFunctionHolder.displayPage(currentPage);
+  }
+});
 
-  document.getElementById("next").addEventListener("click", () => {
-    const totalPages = Math.ceil(myFunctionHolder.totalRows / pageSize);
-    if (currentPage + 1 < totalPages) {
-      currentPage++;
-      myFunctionHolder.displayPage(currentPage);
-    }
-  });
-
-};
-
-
+document.getElementById("next").addEventListener("click", () => {
+  const totalPages = Math.ceil(myFunctionHolder.totalRows / pageSize);
+  if (currentPage + 1 < totalPages) {
+    currentPage++;
+    myFunctionHolder.displayPage(currentPage);
+  }
+});
