@@ -1,4 +1,4 @@
-import { diameterSlider, ellipSlider, eccenSlider } from "./slider";
+import { diameterSlider, ellipSlider, eccenSlider } from "./slider.mjs";
 
 const ejectaLookup = {};
 
@@ -11,7 +11,7 @@ const interiorLookup = {
 }; // TODO: Work in progress, need to parse .csv for all options
 
 // Default settings all set to empty string, null fails with `flatten`
-var FilterSettings = {
+let FilterSettings = {
   Coords: {
     Lat: "",
     Lon: "",
@@ -138,7 +138,7 @@ function getFilters(filterSettings) {
   return filters;
 }
 
-function FilterData(d, filterSettings) {
+function filterData(d, filterSettings) {
   let validRow = true;
 
   let filters = getFilters(filterSettings);
@@ -166,4 +166,4 @@ function updateFilterSettings(filterSettings) {
     ellipSlider.noUiSlider.get(true);
 }
 
-export { updateFilterSettings };
+export { FilterSettings, updateFilterSettings, filterData };

@@ -3,7 +3,14 @@ import {
   pointToEllipse,
   popup,
   myFunctionHolder,
-} from "./modules/map.js";
+  setSelectedEllipseStyle,
+} from "./modules/map.mjs";
+
+import {
+  FilterSettings,
+  updateFilterSettings,
+  filterData,
+} from "./modules/filter.mjs";
 
 ("use strict");
 
@@ -14,21 +21,21 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   const ellipseGroup = L.layerGroup();
 
   // Button click
-  // document
-  //   .getElementById("filter-update")
-  //   .addEventListener("click", function () {
-  //     // Update settings
-  //     // TODO: Check for changes?
-  //     updateFilterSettings(FilterSettings);
-  //     console.log(FilterSettings);
-  //
-  //     // Filter
-  //     data = data.filter((d) => {
-  //       return FilterData(d, FilterSettings);
-  //     });
-  //
-  //     // Need to redraw map and table here
-  //   });
+  document
+    .getElementById("filter-update")
+    .addEventListener("click", function () {
+      // Update settings
+      // TODO: Check for changes?
+      updateFilterSettings(FilterSettings);
+      console.log(FilterSettings);
+
+      // Filter
+      data = data.filter((d) => {
+        return filterData(d, FilterSettings);
+      });
+
+      // Need to redraw map and table here
+    });
 
   // Sort largest to smallest so small craters appear on top
   data.sort(

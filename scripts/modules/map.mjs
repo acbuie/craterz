@@ -138,4 +138,10 @@ function configureMap(id) {
   return leafletMap;
 }
 
-export { configureMap, pointToEllipse, popup, myFunctionHolder };
+export {
+  configureMap,
+  pointToEllipse,
+  popup,
+  myFunctionHolder,
+  setSelectedEllipseStyle,
+};
