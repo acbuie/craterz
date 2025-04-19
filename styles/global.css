@@ -8,11 +8,6 @@ body {
   outline: 2px solid lime;
 }
 
-strong {
-  font-size: 1.125em;
-  font-weight: bold;
-}
-
 #title {
   grid-row: 1; /* Title occupies the first row */
   grid-column: 1 / span 3; /* Title spans all three columns */
@@ -49,6 +44,11 @@ strong {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.filter-group strong {
+  font-size: 1.125em;
+  font-weight: bold;
 }
 
 .filter-row .slider {
