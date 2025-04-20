@@ -1,20 +1,20 @@
 import {
   configureMap,
-  myFunctionHolder,
   setDefaultEllipseStyle,
   setSelectedEllipseStyle,
   drawEllipse,
 } from "./modules/map.mjs";
 
-import {
-  FilterSettings,
-  updateFilterSettings,
-  filterData,
-} from "./modules/filter.mjs";
+import { filterAllDims } from "./modules/filter.mjs";
 
 import { formatColumnHeader, displayPage } from "./modules/table.mjs";
 
 ("use strict");
+
+// TODO: Cleanup
+var myFunctionHolder = {};
+myFunctionHolder.allDims = {};
+myFunctionHolder.ellipseMap = {};
 
 // Setup map baselayer
 let mapObject = configureMap("map");
@@ -22,51 +22,39 @@ let mapObject = configureMap("map");
 // Load crater data
 d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   // Filter on `Update Filter` button
-  document.getElementById("filter-update").addEventListener("click", () => {
-    // Update settings
-    // TODO: Check for changes?
-    updateFilterSettings(FilterSettings);
-    console.log(FilterSettings);
 
-    // Filter
-    data = data.filter((d) => {
-      return filterData(d, FilterSettings);
-    });
+  // Crossfilter + DC setup
+  const ndx = crossfilter(data);
+  const allDims = ndx.dimension((d) => d);
 
-    // Need to redraw map and table here
-  });
+  // Initial page load
+  let filteredData = filterAllDims(ndx);
 
   // Sort largest to smallest so small craters appear on top
-  data.sort(
+  filteredData.sort(
     (a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG),
   );
 
   // Draw ellipses and bind popup
   const ellipseGroup = L.layerGroup();
-  data.map((row) => {
+  filteredData.map((row) => {
     // Add ellipses to ellipseGroup
     let ellipse = drawEllipse(ellipseGroup, row, formatColumnHeader());
 
     myFunctionHolder.ellipseMap[row.CRATER_ID] = ellipse;
-
-    return row;
   });
 
   ellipseGroup.addTo(mapObject);
-  // mapObject.fitBounds(ellipseGroup.getBounds());
-
-  // Crossfilter + DC setup
-  let ndx = crossfilter(data);
-  let allDim = ndx.dimension((d) => d);
   let selectedEllipse = null;
 
   const craterTable = dc.dataTable("#table");
 
-  myFunctionHolder.enrichedData = data;
-  myFunctionHolder.allDim = allDim;
+  // TODO: Cleanup
+  myFunctionHolder.enrichedData = filteredData;
+  myFunctionHolder.allDims = allDims;
 
   craterTable
-    .dimension(myFunctionHolder.allDim)
+    .dimension(allDims)
     .group(() => "")
     .showGroups(false) // Gets rid of group header, which is unnecessary right now,  but might be useful later
     .size(Infinity)
@@ -94,17 +82,17 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     });
 
   // Set up pagination controls
-  const totalRows = data.length;
+  let totalRows = filteredData.length;
   const pageSize = 25;
   let pageIndex = 0;
 
   // Render first page of table
-  displayPage(pageIndex, totalRows, pageSize);
+  displayPage(pageIndex, totalRows, pageSize, myFunctionHolder);
 
   document.getElementById("prev").addEventListener("click", () => {
     if (pageIndex > 0) {
       pageIndex--;
-      displayPage(pageIndex, totalRows, pageSize);
+      displayPage(pageIndex, totalRows, pageSize, myFunctionHolder);
     }
   });
 
@@ -112,7 +100,26 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     const totalPages = Math.ceil(totalRows / pageSize);
     if (pageIndex + 1 < totalPages) {
       pageIndex++;
-      displayPage(pageIndex, totalRows, pageSize);
+      displayPage(pageIndex, totalRows, pageSize, myFunctionHolder);
     }
+  });
+
+  // Update filter on button click
+  document.getElementById("filter-update").addEventListener("click", () => {
+    filteredData = filterAllDims(ndx);
+    totalRows = filteredData.length;
+
+    // Draw table
+    displayPage(pageIndex, totalRows, pageSize, myFunctionHolder);
+    dc.redrawAll();
+
+    // Draw map
+    // NOTE: This clears all data from the leaflet group then recalculates ellipses from the filtered data
+    // There is almost certainly a better way to do this
+    ellipseGroup.clearLayers();
+    filteredData.map((row) => {
+      drawEllipse(ellipseGroup, row, formatColumnHeader());
+    });
+    ellipseGroup.addTo(mapObject);
   });
 });

@@ -10,160 +10,43 @@ const interiorLookup = {
   CPt: "Central Peak",
 }; // TODO: Work in progress, need to parse .csv for all options
 
-// Default settings all set to empty string, null fails with `flatten`
-let FilterSettings = {
-  Coords: {
-    Lat: "",
-    Lon: "",
-  },
-  Diameter: {
-    Min: "",
-    Max: "",
-  },
-  Ellipse: {
-    Eccen: {
-      Min: "",
-      Max: "",
-    },
-    Ellip: {
-      Min: "",
-      Max: "",
-    },
-  },
-  Ejecta: {
-    Layers: "",
-    Morph: "", // EJECTA_MORPH_1
-    LayerMorph: "", // EJECTA_MORPH_2
-    TextureShape: "", // EJECTA_MORPH_3
-    Notes: "",
-  },
-  Interior: {
-    Crater: "",
-    Wall: "",
-    Floor: "",
-  },
-  Confidence: "",
-  Notes: "",
-  Degradation: {
-    Rim: "",
-    Ejecta: "",
-    Floor: "",
-  },
-};
-
-// Filters; Must take `d` as first arg and filterSettings as second arg
-
-function coords(d, filterSettings) {}
-
-function diameter(d, filterSettings) {
-  // Allow for only one of mix or max to be set
-  if (filterSettings.Diameter.Min ^ filterSettings.Diameter.Max) {
-    if (filterSettings.Diameter.Min) {
-      return d.DIAM_CIRC_IMG >= filterSettings.Diameter.Min;
-    } else {
-      return d.DIAM_CIRC_IMG <= filterSettings.Diameter.Max;
-    }
-  }
-
-  return (
-    d.DIAM_CIRC_IMG >= filterSettings.Diameter.Min &&
-    d.DIAM_CIRC_IMG <= filterSettings.Diameter.Max
-  );
+function multivalue_filter(values) {
+  return function (v) {
+    return values.indexOf(v) !== -1;
+  };
 }
 
-function ellipseEccen(d, filterSettings) {
-  if (filterSettings.Ellipse.Eccen.Min ^ filterSettings.Ellipse.Eccen.Max) {
-    if (filterSettings.Ellipse.Eccen.Min) {
-      return d.ELLI_ECCEN_IMG >= filterSettings.Ellipse.Eccen.Min;
-    } else {
-      return d.ELLI_ECCEN_IMG <= filterSettings.Ellipse.Eccen.Max;
-    }
-  }
+// FIXME: Currently only works to downsize data
+function filterAllDims(ndx) {
+  const idDim = ndx.dimension((d) => d.CRATER_ID),
+    latDim = ndx.dimension((d) => +d.LAT_ELLI_IMG),
+    lonDim = ndx.dimension((d) => +d.LON_ELLI_IMG),
+    diamDim = ndx.dimension((d) => +d.DIAM_CIRC_IMG),
+    eccenDim = ndx.dimension((d) => +d.DIAM_ELLI_ECCEN_IMG),
+    ellipDim = ndx.dimension((d) => +d.DIAM_ELLI_ELLIP_IMG),
+    angleDim = ndx.dimension((d) => +d.DIAM_ELLI_ANGLE_IMG),
+    layNumDim = ndx.dimension((d) => +d.LAY_NUMBER),
+    layMorph1Dim = ndx.dimension((d) => d.LAY_MORPH1),
+    layMorph2Dim = ndx.dimension((d) => d.LAY_MORPH2),
+    layMorph3Dim = ndx.dimension((d) => d.LAY_MORPH3),
+    layNotesDim = ndx.dimension((d) => d.LAY_NOTES),
+    intMorph1Dim = ndx.dimension((d) => d.INT_MORPH1),
+    intMorph2Dim = ndx.dimension((d) => d.INT_MORPH2),
+    intMorph3Dim = ndx.dimension((d) => d.INT_MORPH3),
+    confDim = ndx.dimension((d) => d.CONF),
+    notesDim = ndx.dimension((d) => d.NOTES),
+    degRimDim = ndx.dimension((d) => d.DEG_RIM),
+    degEjcDim = ndx.dimension((d) => d.DEG_EJC),
+    degFlrDim = ndx.dimension((d) => d.DEG_FLR);
 
-  return (
-    d.ELLI_ECCEN_IMG >= filterSettings.Ellipse.Eccen.Min &&
-    d.ELLI_ECCEN_IMG <= filterSettings.Ellipse.Eccen.Max
-  );
-}
-function ellipseEllip(d, filterSettings) {
-  if (filterSettings.Ellipse.Ellip.Min ^ filterSettings.Ellipse.Ellip.Max) {
-    if (filterSettings.Ellipse.Ellip.Min) {
-      return d.ELLI_ELLIP_IMG >= filterSettings.Ellipse.Ellip.Min;
-    } else {
-      return d.ELLI_ELLIP_IMG <= filterSettings.Ellipse.Ellip.Max;
-    }
-  }
+  diamDim.filter(diameterSlider.noUiSlider.get(true));
+  eccenDim.filter(eccenSlider.noUiSlider.get(true));
+  ellipDim.filter(ellipSlider.noUiSlider.get(true));
 
-  return (
-    d.ELLI_ELLIP_IMG >= filterSettings.Ellipse.Ellip.Min &&
-    d.ELLI_ELLIP_IMG <= filterSettings.Ellipse.Ellip.Max
-  );
-}
+  // Additional filters
 
-// Ejecta filters
-function ejectaLayers(d, filterSettings) {}
-function ejectaMorph(d, filterSettings) {}
-function ejectaLayerMorph(d, filterSettings) {}
-function ejectaTextureShape(d, filterSettings) {}
-function ejectaNotes(d, filterSettings) {}
-
-// Interior filters
-function interiorCrater(d, filterSettings) {
-  if (d.INT_MORPH1 === null) {
-    return false;
-  }
-  return d.INT_MORPH1.includes(filterSettings.Interior.Crater);
-}
-function interiorWall(d, filterSettings) {}
-function interiorFloor(d, filterSettings) {}
-
-function confidence(d, filterSettings) {}
-function notes(d, filterSettings) {}
-
-function degRim(d, filterSettings) {}
-function degWall(d, filterSettings) {}
-function degFloor(d, filterSettings) {}
-
-function getFilters(filterSettings) {
-  let filters = [];
-
-  if (filterSettings.Diameter.Min || filterSettings.Diameter.Max) {
-    filters.push(diameter);
-  }
-
-  if (filterSettings.Interior.Crater) {
-    filters.push(interiorCrater);
-  }
-
-  return filters;
+  let filteredData = ndx.allFiltered();
+  return filteredData;
 }
 
-function filterData(d, filterSettings) {
-  let validRow = true;
-
-  let filters = getFilters(filterSettings);
-
-  filters.every((func) => {
-    validRow = validRow && func(d, filterSettings);
-
-    // Break early if fails a filter
-    if (!validRow) {
-      return false;
-    }
-
-    return true;
-  });
-
-  return validRow;
-}
-
-function updateFilterSettings(filterSettings) {
-  [filterSettings.Diameter.Min, FilterSettings.Diameter.Max] =
-    diameterSlider.noUiSlider.get(true);
-  [filterSettings.Ellipse.Eccen.Min, FilterSettings.Ellipse.Eccen.Max] =
-    eccenSlider.noUiSlider.get(true);
-  [filterSettings.Ellipse.Ellip.Min, FilterSettings.Ellipse.Ellip.Max] =
-    ellipSlider.noUiSlider.get(true);
-}
-
-export { FilterSettings, updateFilterSettings, filterData };
+export { filterAllDims };

@@ -1,5 +1,3 @@
-import { myFunctionHolder } from "./map.mjs";
-
 function formatColumnHeader() {
   return [
     { label: "Crater ID", format: (d) => d.CRATER_ID },
@@ -32,7 +30,9 @@ function formatColumnHeader() {
   ];
 }
 
-function displayPage(pageIndex, totalRows, pageSize) {
+// FIXME: Needs rework with filter
+// If already on a page beyond the filtered data, then the page will remain blank
+function displayPage(pageIndex, totalRows, pageSize, myFunctionHolder) {
   // Get data for page slice
   const offset = pageIndex * pageSize;
   const pageData = myFunctionHolder.enrichedData.slice(
@@ -40,7 +40,7 @@ function displayPage(pageIndex, totalRows, pageSize) {
     offset + pageSize,
   );
 
-  myFunctionHolder.allDim.filterFunction((d) => pageData.includes(d));
+  myFunctionHolder.allDims.filterFunction((d) => pageData.includes(d));
 
   dc.redrawAll();
 

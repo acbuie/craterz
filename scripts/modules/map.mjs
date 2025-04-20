@@ -1,5 +1,3 @@
-var myFunctionHolder = {};
-
 function setDefaultEllipseStyle(ellipse) {
   ellipse.setStyle({
     color: "black",
@@ -52,10 +50,6 @@ function popup(row, columnMap) {
   return popupText;
 }
 
-myFunctionHolder.allDim = {};
-
-myFunctionHolder.ellipseMap = {};
-
 function configureMap(id) {
   let leafletMap = L.map(id).setView([0, 0], 2);
 
@@ -87,7 +81,6 @@ function drawEllipse(layer, row, columnMap) {
 
 export {
   configureMap,
-  myFunctionHolder,
   setDefaultEllipseStyle,
   setSelectedEllipseStyle,
   drawEllipse,
