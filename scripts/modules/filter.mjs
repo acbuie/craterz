@@ -39,6 +39,8 @@ function filterAllDims(ndx) {
     degEjcDim = ndx.dimension((d) => d.DEG_EJC),
     degFlrDim = ndx.dimension((d) => d.DEG_FLR);
 
+  diamDim.filter(null);
+
   diamDim.filter(diameterSlider.noUiSlider.get(true));
   eccenDim.filter(eccenSlider.noUiSlider.get(true));
   ellipDim.filter(ellipSlider.noUiSlider.get(true));

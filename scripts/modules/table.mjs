@@ -30,27 +30,24 @@ function formatColumnHeader() {
   ];
 }
 
-// FIXME: Needs rework with filter
-// If already on a page beyond the filtered data, then the page will remain blank
-function displayPage(pageIndex, totalRows, pageSize, myFunctionHolder) {
-  // Get data for page slice
-  const offset = pageIndex * pageSize;
-  const pageData = myFunctionHolder.enrichedData.slice(
-    offset,
-    offset + pageSize,
-  );
+function updatePage(pageData, dataWrapper) {
+  // Offset and slice to page size
+  const offset = pageData.index * pageData.size;
+  const tableData = dataWrapper.data.slice(offset, offset + pageData.size);
 
-  myFunctionHolder.allDims.filterFunction((d) => pageData.includes(d));
+  // Display all dimensions
+  dataWrapper.allDims.filterFunction((d) => tableData.includes(d));
 
-  dc.redrawAll();
-
-  const pageText = `Showing rows ${offset + 1}–${offset + pageSize} out of ${totalRows}`;
+  // Location within table
+  const pageText = `Showing rows ${offset + 1}–${offset + pageData.size} out of ${pageData.rows}`;
   document.getElementById("page-info").textContent = pageText;
 
   // Disable buttons when at min/max
-  const totalPages = Math.ceil(totalRows / pageSize);
-  document.getElementById("next").disabled = pageIndex + 1 >= totalPages;
-  document.getElementById("prev").disabled = pageIndex === 0;
+  const totalPages = Math.ceil(pageData.rows / pageData.size);
+  document.getElementById("next").disabled = pageData.index + 1 >= totalPages;
+  document.getElementById("prev").disabled = pageData.index === 0;
+
+  dc.redrawAll();
 }
 
-export { formatColumnHeader, displayPage };
+export { formatColumnHeader, updatePage };

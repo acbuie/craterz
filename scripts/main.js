@@ -7,14 +7,14 @@ import {
 
 import { filterAllDims } from "./modules/filter.mjs";
 
-import { formatColumnHeader, displayPage } from "./modules/table.mjs";
+import { formatColumnHeader, updatePage } from "./modules/table.mjs";
 
 ("use strict");
 
 // TODO: Cleanup
-var myFunctionHolder = {};
-myFunctionHolder.allDims = {};
-myFunctionHolder.ellipseMap = {};
+let dataWrapper = {};
+dataWrapper.allDims = {};
+dataWrapper.ellipseMap = {};
 
 // Setup map baselayer
 let mapObject = configureMap("map");
@@ -41,7 +41,7 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     // Add ellipses to ellipseGroup
     let ellipse = drawEllipse(ellipseGroup, row, formatColumnHeader());
 
-    myFunctionHolder.ellipseMap[row.CRATER_ID] = ellipse;
+    dataWrapper.ellipseMap[row.CRATER_ID] = ellipse;
   });
 
   ellipseGroup.addTo(mapObject);
@@ -50,8 +50,8 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   const craterTable = dc.dataTable("#table");
 
   // TODO: Cleanup
-  myFunctionHolder.enrichedData = filteredData;
-  myFunctionHolder.allDims = allDims;
+  dataWrapper.data = filteredData;
+  dataWrapper.allDims = allDims;
 
   craterTable
     .dimension(allDims)
@@ -67,7 +67,7 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
         rows.on("click", function () {
           const cells = d3.select(this).selectAll("td").nodes();
           const craterId = cells[0]?.textContent?.trim();
-          const ellipse = myFunctionHolder.ellipseMap[craterId];
+          const ellipse = dataWrapper.ellipseMap[craterId];
           if (ellipse) {
             if (selectedEllipse) {
               setDefaultEllipseStyle(selectedEllipse);
@@ -82,36 +82,74 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     });
 
   // Set up pagination controls
-  let totalRows = filteredData.length;
-  const pageSize = 25;
-  let pageIndex = 0;
+  let pageSettings = {
+    rows: filteredData.length,
+    size: 25,
+    index: 0,
+  };
 
   // Render first page of table
-  displayPage(pageIndex, totalRows, pageSize, myFunctionHolder);
+  dc.renderAll();
+  updatePage(pageSettings, dataWrapper);
 
   document.getElementById("prev").addEventListener("click", () => {
-    if (pageIndex > 0) {
-      pageIndex--;
-      displayPage(pageIndex, totalRows, pageSize, myFunctionHolder);
+    if (pageSettings.index > 0) {
+      pageSettings.index--;
+      updatePage(pageSettings, dataWrapper);
     }
   });
 
   document.getElementById("next").addEventListener("click", () => {
-    const totalPages = Math.ceil(totalRows / pageSize);
-    if (pageIndex + 1 < totalPages) {
-      pageIndex++;
-      displayPage(pageIndex, totalRows, pageSize, myFunctionHolder);
+    const totalPages = Math.ceil(pageSettings.rows / pageSettings.size);
+    if (pageSettings.index + 1 < totalPages) {
+      pageSettings.index++;
+      updatePage(pageSettings, dataWrapper);
     }
   });
 
   // Update filter on button click
   document.getElementById("filter-update").addEventListener("click", () => {
+    const ndx = crossfilter(data);
     filteredData = filterAllDims(ndx);
-    totalRows = filteredData.length;
+
+    filteredData.sort(
+      (a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG),
+    );
+
+    pageSettings.rows = filteredData.length;
+
+    // NOTE: Recreate data table
+    craterTable
+      .dimension(allDims)
+      .group(() => "")
+      .showGroups(false) // Gets rid of group header, which is unnecessary right now,  but might be useful later
+      .size(Infinity)
+      .columns(formatColumnHeader())
+      .sortBy((d) => d.DIAM_CIRC_IMG)
+      .order(d3.descending)
+      .on("renderlet", function () {
+        setTimeout(() => {
+          const rows = d3.selectAll(".dc-table-row");
+          rows.on("click", function () {
+            const cells = d3.select(this).selectAll("td").nodes();
+            const craterId = cells[0]?.textContent?.trim();
+            const ellipse = dataWrapper.ellipseMap[craterId];
+            if (ellipse) {
+              if (selectedEllipse) {
+                setDefaultEllipseStyle(selectedEllipse);
+              }
+              setSelectedEllipseStyle(ellipse);
+              mapObject.fitBounds(ellipse.getBounds(), { padding: [100, 100] });
+              ellipse.openPopup();
+              selectedEllipse = ellipse;
+            }
+          });
+        }, 0);
+      });
 
     // Draw table
-    displayPage(pageIndex, totalRows, pageSize, myFunctionHolder);
-    dc.redrawAll();
+    dataWrapper.data = filteredData;
+    updatePage(pageSettings, dataWrapper);
 
     // Draw map
     // NOTE: This clears all data from the leaflet group then recalculates ellipses from the filtered data
