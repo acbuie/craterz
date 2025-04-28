@@ -1,127 +1,147 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpage Layout with Leaflet</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/dc@4.2.4/dist/style/dc.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Webpage Layout with Leaflet</title>
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/dc@4.2.4/dist/style/dc.min.css" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="libraries/nouislider/nouislider.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/global.css" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/crossfilter2@1.5.4/crossfilter.min.js"></script>
+    <script src="https://unpkg.com/dc@4.2.4/dist/dc.min.js"></script>
+    <script src="libraries/leaflet/leaflet.js"></script>
+    <script src="libraries/leaflet/l.ellipse.js"></script>
+    <script src="libraries/nouislider/nouislider.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
 
-  <link href="libraries/nouislider/nouislider.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/global.css" />
-  <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://unpkg.com/crossfilter2@1.5.4/crossfilter.min.js"></script>
-  <script src="https://unpkg.com/dc@4.2.4/dist/dc.min.js"></script>
-  <script src="libraries/leaflet/leaflet.js"></script>
-  <script src="libraries/leaflet/l.ellipse.js"></script>
-  <script src="libraries/nouislider/nouislider.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
+  <body>
+    <div id="title">Mars Global Crater Database</div>
+    <div id="button-container">
+      <button
+        type="button"
+        class="btn btn-info btn-lg small-btn"
+        data-toggle="modal"
+        data-target="#myModal_lg"
+      >
+        Click here to learn more about this web app!
+      </button>
 
-<body>
-  <div id="title">Mars Global Crater Database</div>
-  <div id="button-container">
-    <button type="button" class="btn btn-info btn-lg small-btn" data-toggle="modal" data-target="#myModal_lg">Click here to learn more about this web app!</button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal_lg" role="dialog">
-      <!-- Large Modal -->
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
+      <!-- Modal -->
+      <div class="modal fade" id="myModal_lg" role="dialog">
+        <!-- Large Modal -->
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+              <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+              <p>Insert Text Later</p>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
           </div>
-          <div class="modal-body">
-            <p>Insert Text Later</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="filter-container">
+      <div class="filter-group">
+        <strong class="filter-header">Shape</strong>
+        <div class="filter-content">
+          <div class="filter-row">
+            Diameter
+            <div class="slider" id="diameter-slider"></div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <div class="filter-row">
+            Eccentricity
+            <div class="slider" id="eccen-slider"></div>
+          </div>
+          <div class="filter-row">
+            Ellipticity
+            <div class="slider" id="ellip-slider"></div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div id="filter-container">
-    <div class="filter-group">
-      <strong class="filter-header">Shape</strong>
-      <div class="filter-content">
-        <div class="filter-row">
-          Diameter
-          <div class="slider" id="diameter-slider"></div>
-        </div>
-        <div class="filter-row">
-          Eccentricity
-          <div class="slider" id="eccen-slider"></div>
-        </div>
-        <div class="filter-row">
-          Ellipticity
-          <div class="slider" id="ellip-slider"></div>
+      <div class="filter-group">
+        <strong class="filter-header">Ejecta</strong>
+        <div class="filter-content">
+          <div class="filter-row">Layers</div>
+          <div class="filter-row">Classification</div>
+          <div class="filter-row">Texture</div>
+          <div class="filter-row">Shape</div>
+          <div class="filter-row">Notes</div>
         </div>
       </div>
-    </div>
-    <div class="filter-group">
-      <strong class="filter-header">Ejecta</strong>
-      <div class="filter-content">
-        <div class="filter-row">Layers</div>
-        <div class="filter-row">Classification</div>
-        <div class="filter-row">Texture</div>
-        <div class="filter-row">Shape</div>
-        <div class="filter-row">Notes</div>
+      <div class="filter-group">
+        <strong class="filter-header">Interior</strong>
+        <div class="filter-content">
+          <div class="filter-row">Classification</div>
+          <div class="filter-row">Wall Morphology</div>
+          <div class="filter-row">Floor Morphology</div>
+        </div>
       </div>
-    </div>
-    <div class="filter-group">
-      <strong class="filter-header">Interior</strong>
-      <div class="filter-content">
-        <div class="filter-row">Classification</div>
-        <div class="filter-row">Wall Morphology</div>
-        <div class="filter-row">Floor Morphology</div>
+      <div class="filter-group">
+        <strong class="filter-header">Degradation</strong>
+        <div class="filter-content">
+          <div class="filter-row">Rim</div>
+          <div class="filter-row">Ejecta</div>
+          <div class="filter-row">Floor</div>
+        </div>
       </div>
-    </div>
-    <div class="filter-group">
-      <strong class="filter-header">Degradation</strong>
-      <div class="filter-content">
-        <div class="filter-row">Rim</div>
-        <div class="filter-row">Ejecta</div>
-        <div class="filter-row">Floor</div>
+      <div class="filter-group">
+        <strong class="filter-header">Misc</strong>
+        <div class="filter-content">
+          <div class="filter-row">Confidence</div>
+          <div class="filter-row">Notes</div>
+        </div>
       </div>
+
+      <button id="filter-update" type="submit">Update Filter</button>
     </div>
-    <div class="filter-group">
-      <strong class="filter-header">Misc</strong>
-      <div class="filter-content">
-        <div class="filter-row">Confidence</div>
-        <div class="filter-row">Notes</div>
+
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+
+    <div id="table-container">
+      <div id="pagination">
+        <button id="prev">Previous</button>
+        <span id="page-info"></span>
+        <button id="next">Next</button>
       </div>
+      <table class="dc-data-table" id="table"></table>
     </div>
 
-    <button id="filter-update" type="submit">Update Filter</button>
-  </div>
+    <!-- <div id="chart">Charts</div> -->
 
-  <div id="map-container">
-    <div id="map"></div>
-  </div>
-
-  <div id="table-container">
-    <div id="pagination">
-      <button id="prev">Previous</button>
-      <span id="page-info"></span>
-      <button id="next">Next</button>
-    </div>
-    <table class="dc-data-table" id="table"></table>
-  </div>
-
-  <!-- <div id="chart">Charts</div> -->
-
-  <!-- These should be loaded last -->
-  <!-- <script src="scripts/utils.js"></script> -->
-  <!-- <script src="scripts/slider.js"></script> -->
-  <!-- <script src="scripts/filter.js"></script> -->
-  <script type="module" src="scripts/main.js"></script>
-</body>
-
+    <!-- These should be loaded last -->
+    <!-- <script src="scripts/utils.js"></script> -->
+    <!-- <script src="scripts/slider.js"></script> -->
+    <!-- <script src="scripts/filter.js"></script> -->
+    <script type="module" src="scripts/main.js"></script>
+  </body>
 </html>
+
