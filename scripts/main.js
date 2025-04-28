@@ -135,6 +135,11 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
             const craterId = cells[0]?.textContent?.trim();
             const ellipse = dataWrapper.ellipseMap[craterId];
             if (ellipse) {
+              // NOTE: This is a bit of a hack to get the ellipse to redraw
+              // and show the popup
+              if (!ellipseGroup.hasLayer(ellipse)) {
+                ellipseGroup.addLayer(ellipse);
+              }
               if (selectedEllipse) {
                 setDefaultEllipseStyle(selectedEllipse);
               }
