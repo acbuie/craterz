@@ -22,74 +22,12 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
-      <!-- Modal -->
-      <div class="modal fade" id="myModal_lg" role="dialog">
-        <!-- Large Modal -->
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">
-                &times;
-              </button>
-              <h4 class="modal-title">About this tool</h4>
-            </div>
-            <div class="modal-body">
-              <h5>About the Data</h5>
-              <p>
-                This web app displays the Martian crater database compiled by
-                Dr. Stuart Robbins and Dr. Brian Hynek. The initial publication
-                for this work can be found in the following paper:
-                <a href="https://doi.org/10.1029/2011JE003966" target="_blank"
-                  >A new global database of Mars impact craters ≥1 km: 1.
-                  Database creation, properties, and parameters.</a
-                >. The database has been updated several times, with the most
-                recent iteration being available on
-                <a href="https://craters.sjrdesign.net/" target="_blank"
-                  >Dr. Robbins' website</a
-                >.
-              </p>
-              <p>
-                Users of this tool should be aware of the caveats of the Mars
-                crater database. These are discussed in a
-                <a
-                  href="http://www.planetarycraterconsortium.nau.edu/RobbinsPCC8.pdf"
-                  target="_blank"
-                  >conference abstract</a
-                >
-                and summarized on Dr. Robbins' website. We present this search
-                tool without commentary on the quality of the database; it is
-                left to the user to decide if the database is good enough for
-                their usecase.
-              </p>
-              <h5>Usage</h5>
-              <p>
-                Filters are provided on the left hand side. Numeric data can be
-                filtered by clamping with a range slider. Classification data
-                can filtered via text input. Eventually, all valid inputs will
-                be provided and selectable with small pie charts. Once the
-                filters are set, they can be applied by clicking the "Update
-                Filter" button.
-              </p>
-              <p>
-                The map and table update to show craters that match the selected
-                filter. Users may scroll on the table horizontally to see
-                additional columns and vertically to see additional rows. Only
-                25 rows are shown at a time for simplicity.
-              </p>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-default"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<body>
+  <div id="title">Mars Global Crater Database</div>
+  <div id="button-container">
+    <button type="button" class="btn btn-info btn-lg small-btn" data-toggle="modal" data-target="#myModal_lg">
+      Click here to learn more about this web app!
+    </button>
 
     <!-- Modal -->
     <div class="modal fade" id="myModal_lg" role="dialog">
@@ -187,10 +125,12 @@
   </div>
 
   <!-- <div id="chart">Charts</div> -->
-    <!-- These should be loaded last -->
-    <!-- <script src="scripts/utils.js"></script> -->
-    <!-- <script src="scripts/slider.js"></script> -->
-    <!-- <script src="scripts/filter.js"></script> -->
-    <script type="module" src="scripts/main.js"></script>
-  </body>
+
+  <!-- These should be loaded last -->
+  <!-- <script src="scripts/utils.js"></script> -->
+  <!-- <script src="scripts/slider.js"></script> -->
+  <!-- <script src="scripts/filter.js"></script> -->
+  <script type="module" src="scripts/main.js"></script>
+</body>
+
 </html>
