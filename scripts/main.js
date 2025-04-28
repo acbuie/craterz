@@ -117,6 +117,7 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     );
 
     pageSettings.rows = filteredData.length;
+    pageSettings.index = 0; // Reset to first page after a click
 
     // NOTE: Recreate data table
     craterTable

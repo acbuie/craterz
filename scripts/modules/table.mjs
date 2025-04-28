@@ -31,19 +31,22 @@ function formatColumnHeader() {
 }
 
 function updatePage(pageData, dataWrapper) {
+  const totalPages = Math.ceil(pageData.rows / pageData.size);
   // Offset and slice to page size
   const offset = pageData.index * pageData.size;
-  const tableData = dataWrapper.data.slice(offset, offset + pageData.size);
+  const end = Math.min(offset + pageData.size, pageData.rows); // Cap the end
+
+  const tableData = dataWrapper.data.slice(offset, end);
 
   // Display all dimensions
   dataWrapper.allDims.filterFunction((d) => tableData.includes(d));
+
 
   // Location within table
   const pageText = `Showing rows ${offset + 1}–${offset + pageData.size} out of ${pageData.rows}`;
   document.getElementById("page-info").textContent = pageText;
 
   // Disable buttons when at min/max
-  const totalPages = Math.ceil(pageData.rows / pageData.size);
   document.getElementById("next").disabled = pageData.index + 1 >= totalPages;
   document.getElementById("prev").disabled = pageData.index === 0;
 
