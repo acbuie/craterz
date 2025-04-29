@@ -47,7 +47,7 @@ function popup(row, columnMap) {
     .filter(Boolean); // remove nulls
 
   const popupText = lines.join("<br>");
-  return popupText;
+  return `<div class="scrollable-popup">${popupText}</div>`; // Wrap in a div to make it scrollable
 }
 
 function configureMap(id) {
