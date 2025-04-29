@@ -8,6 +8,7 @@ import {
 import { filterAllDims } from "./modules/filter.mjs";
 
 import { formatColumnHeader, updatePage } from "./modules/table.mjs";
+import { convertToCSV } from "./modules/csv.mjs";
 
 ("use strict");
 
@@ -168,4 +169,29 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     });
     ellipseGroup.addTo(mapObject);
   });
+
+  // Export to CSV
+  document.getElementById("download-csv").addEventListener("click", function() {  
+    if (filteredData.length === 0) {
+      alert("No data to download!");
+      return;
+    }
+  
+    const csvContent = convertToCSV(filteredData);
+  
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+  
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "filtered_data.csv";
+    a.style.display = "none";
+  
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+  console.log(filteredData);
+  console.log(dataWrapper);
 });
