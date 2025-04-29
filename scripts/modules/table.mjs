@@ -50,6 +50,9 @@ function updatePage(pageData, dataWrapper) {
   document.getElementById("next").disabled = pageData.index + 1 >= totalPages;
   document.getElementById("prev").disabled = pageData.index === 0;
 
+
+  // Scroll table to top-left after every page change
+  document.getElementById("table-container").scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   dc.redrawAll();
 }
 

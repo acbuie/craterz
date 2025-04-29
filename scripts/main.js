@@ -118,6 +118,8 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
 
     pageSettings.rows = filteredData.length;
     pageSettings.index = 0; // Reset to first page after a click
+    // Scroll table to top-left
+    document.getElementById("table-container").scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
     // NOTE: Recreate data table
     craterTable
