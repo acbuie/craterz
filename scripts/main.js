@@ -192,6 +192,4 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
-  console.log(filteredData);
-  console.log(dataWrapper);
 });

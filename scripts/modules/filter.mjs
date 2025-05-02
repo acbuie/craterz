@@ -16,7 +16,6 @@ function multivalue_filter(values) {
   };
 }
 
-// FIXME: Currently only works to downsize data
 function filterAllDims(ndx) {
   const idDim = ndx.dimension((d) => d.CRATER_ID),
     latDim = ndx.dimension((d) => +d.LAT_ELLI_IMG),
