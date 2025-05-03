@@ -100,6 +100,16 @@ body {
   font-weight: bold;
 }
 
+
+.filter-subgroup .filter-toggle {
+  background-color: lightred;
+  border: 1px solid #aaa;
+  font-size: 1em;
+  margin-top: 5px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
 #filter-update {
   margin-top: 16px; /* or whatever size you want */
   padding: 6px 12px;
@@ -212,4 +222,8 @@ body {
   padding: 1px;
   background-color: #fff;
   font-size: 14px;
+}
+
+#pie-chart-container {
+  margin-bottom: 12px;
 }

@@ -134,7 +134,17 @@
       </button>
       <div class="collapse" id="interior-filters">
         <div class="filter-content">
-          <div class="filter-row">Classification</div>
+          <div class="filter-subgroup">
+            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#classification-pie"
+            aria-expanded="false">
+            Classification
+            </button>
+            <div class="collapse" id="classification-pie">
+              <div class="filter-row">
+                <div id="pie-chart-container"></div>
+              </div>
+            </div>
+          </div>
           <div class="filter-row">Wall Morphology</div>
           <div class="filter-row">Floor Morphology</div>
         </div>
@@ -160,7 +170,9 @@
       </button>
       <div class="collapse" id="misc-filters">
         <div class="filter-content">
-          <div class="filter-row">Confidence</div>
+          <div class="filter-row">
+            Confidence
+          </div>
         </div>
       </div>
     </div>

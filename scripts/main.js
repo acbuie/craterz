@@ -9,6 +9,8 @@ import { filterAllDims } from "./modules/filter.mjs";
 
 import { formatColumnHeader, updatePage } from "./modules/table.mjs";
 import { convertToCSV } from "./modules/csv.mjs";
+import { renderPieChart } from "./modules/pie_chart.mjs";
+
 
 ("use strict");
 
@@ -44,7 +46,10 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
 
     dataWrapper.ellipseMap[row.CRATER_ID] = ellipse;
   });
+  
+  renderPieChart("pie-chart-container", filteredData, "INT_MORPH1");
 
+  
   ellipseGroup.addTo(mapObject);
   let selectedEllipse = null;
 
