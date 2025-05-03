@@ -1,5 +1,23 @@
 import { diameterSlider, ellipSlider, eccenSlider } from "./slider.mjs";
 
+// Stores selected values for each category
+const categoryFilters = {
+  Classification: new Set()
+  // Add more keys as needed
+};
+
+function toggleCategoryFilter(category, value) {
+  if (!categoryFilters[category]) {
+    categoryFilters[category] = new Set();
+  }
+
+  if (categoryFilters[category].has(value)) {
+    categoryFilters[category].delete(value); // Deselect
+  } else {
+    categoryFilters[category].add(value); // Select
+  }
+}
+
 const ejectaLookup = {};
 
 const interiorLookup = {
@@ -39,15 +57,20 @@ function filterAllDims(ndx) {
     degFlrDim = ndx.dimension((d) => d.DEG_FLR);
 
   diamDim.filter(null);
-
+  
+  // Sliders
   diamDim.filter(diameterSlider.noUiSlider.get(true));
   eccenDim.filter(eccenSlider.noUiSlider.get(true));
   ellipDim.filter(ellipSlider.noUiSlider.get(true));
 
-  // Additional filters
+  // Apply multi-value category filters
+  if (categoryFilters.Classification && categoryFilters.Classification.size > 0) {
+    const selected = Array.from(categoryFilters.Classification);
+    intMorph1Dim.filter(d => selected.includes(d ?? "NA"));
+  }
 
   let filteredData = ndx.allFiltered();
   return filteredData;
 }
 
-export { filterAllDims };
+export { filterAllDims, toggleCategoryFilter };

@@ -227,3 +227,6 @@ body {
 #pie-chart-container {
   margin-bottom: 12px;
 }
+#pie-chart-container path {
+  pointer-events: all;
+}

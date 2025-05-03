@@ -46,10 +46,18 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
 
     dataWrapper.ellipseMap[row.CRATER_ID] = ellipse;
   });
-  
-  renderPieChart("pie-chart-container", filteredData, "INT_MORPH1");
 
-  
+  renderPieChart("pie-chart-container", filteredData, "Classification", (label) => {
+    toggleCategoryFilter("Classification", label);
+    const newNdx = crossfilter(data);
+    const newFiltered = filterAllDims(newNdx);
+
+    dataWrapper.data = newFiltered;
+    pageSettings.rows = newFiltered.length;
+    pageSettings.index = 0;
+    updatePage(pageSettings, dataWrapper);
+  });
+
   ellipseGroup.addTo(mapObject);
   let selectedEllipse = null;
 
@@ -176,22 +184,22 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   });
 
   // Export to CSV
-  document.getElementById("download-csv").addEventListener("click", function() {  
+  document.getElementById("download-csv").addEventListener("click", function () {
     if (filteredData.length === 0) {
       alert("No data to download!");
       return;
     }
-  
+
     const csvContent = convertToCSV(filteredData);
-  
+
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
-  
+
     const a = document.createElement("a");
     a.href = url;
     a.download = "filtered_data.csv";
     a.style.display = "none";
-  
+
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
