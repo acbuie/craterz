@@ -5,7 +5,7 @@ import {
   drawEllipse,
 } from "./modules/map.mjs";
 
-import { filterAllDims } from "./modules/filter.mjs";
+import { filterAllDims, toggleCategoryFilter } from "./modules/filter.mjs";
 
 import { formatColumnHeader, updatePage } from "./modules/table.mjs";
 import { convertToCSV } from "./modules/csv.mjs";
@@ -47,11 +47,13 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     dataWrapper.ellipseMap[row.CRATER_ID] = ellipse;
   });
 
-  renderPieChart("pie-chart-container", filteredData, "Classification", (label) => {
-    toggleCategoryFilter("Classification", label);
+  renderPieChart("pie-chart-container", filteredData, "INT_MORPH1", (label) => {
+    console.log("You clicked on:", label);
+    toggleCategoryFilter("INT_MORPH1", label);
     const newNdx = crossfilter(data);
     const newFiltered = filterAllDims(newNdx);
-
+    console.log("Old Filtered data:", filteredData);
+    console.log("Filtered data:", newFiltered);
     dataWrapper.data = newFiltered;
     pageSettings.rows = newFiltered.length;
     pageSettings.index = 0;

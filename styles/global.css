@@ -229,4 +229,5 @@ body {
 }
 #pie-chart-container path {
   pointer-events: all;
+  cursor: pointer;
 }
