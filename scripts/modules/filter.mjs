@@ -2,7 +2,7 @@ import { diameterSlider, ellipSlider, eccenSlider } from "./slider.mjs";
 
 // Stores selected values for each category
 const categoryFilters = {
-  Classification: new Set()
+  Classification: new Set(),
   // Add more keys as needed
 };
 
@@ -34,7 +34,7 @@ function multivalue_filter(values) {
   };
 }
 
-function filterAllDims(ndx) {
+function filterAllDims(ndx, filter) {
   const idDim = ndx.dimension((d) => d.CRATER_ID),
     latDim = ndx.dimension((d) => +d.LAT_ELLI_IMG),
     lonDim = ndx.dimension((d) => +d.LON_ELLI_IMG),
@@ -57,17 +57,22 @@ function filterAllDims(ndx) {
     degFlrDim = ndx.dimension((d) => d.DEG_FLR);
 
   diamDim.filter(null);
-  
+
   // Sliders
   diamDim.filter(diameterSlider.noUiSlider.get(true));
   eccenDim.filter(eccenSlider.noUiSlider.get(true));
   ellipDim.filter(ellipSlider.noUiSlider.get(true));
 
+  // intMorph1Dim.filter((v) => [""].includes(v));
+
   // Apply multi-value category filters
-  if (categoryFilters.Classification && categoryFilters.Classification.size > 0) {
-    const selected = Array.from(categoryFilters.Classification);
-    intMorph1Dim.filter(d => selected.includes(d ?? "NA"));
-  }
+  // if (
+  //   categoryFilters.Classification &&
+  //   categoryFilters.Classification.size > 0
+  // ) {
+  //   const selected = Array.from(categoryFilters.Classification);
+  //   intMorph1Dim.filter((d) => selected.includes(d ?? "NA"));
+  // }
 
   let filteredData = ndx.allFiltered();
   return filteredData;

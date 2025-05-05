@@ -9,8 +9,7 @@ import { filterAllDims, toggleCategoryFilter } from "./modules/filter.mjs";
 
 import { formatColumnHeader, updatePage } from "./modules/table.mjs";
 import { convertToCSV } from "./modules/csv.mjs";
-import { renderPieChart } from "./modules/pie_chart.mjs";
-
+import { renderCharts } from "./modules/renderCharts.mjs";
 
 ("use strict");
 
@@ -47,18 +46,8 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     dataWrapper.ellipseMap[row.CRATER_ID] = ellipse;
   });
 
-  renderPieChart("pie-chart-container", filteredData, "INT_MORPH1", (label) => {
-    console.log("You clicked on:", label);
-    toggleCategoryFilter("INT_MORPH1", label);
-    const newNdx = crossfilter(data);
-    const newFiltered = filterAllDims(newNdx);
-    console.log("Old Filtered data:", filteredData);
-    console.log("Filtered data:", newFiltered);
-    dataWrapper.data = newFiltered;
-    pageSettings.rows = newFiltered.length;
-    pageSettings.index = 0;
-    updatePage(pageSettings, dataWrapper);
-  });
+  // Initial chart setup
+  renderCharts(filteredData);
 
   ellipseGroup.addTo(mapObject);
   let selectedEllipse = null;
@@ -135,7 +124,9 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     pageSettings.rows = filteredData.length;
     pageSettings.index = 0; // Reset to first page after a click
     // Scroll table to top-left
-    document.getElementById("table-container").scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    document
+      .getElementById("table-container")
+      .scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     // NOTE: Recreate data table
     craterTable
@@ -186,25 +177,27 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   });
 
   // Export to CSV
-  document.getElementById("download-csv").addEventListener("click", function () {
-    if (filteredData.length === 0) {
-      alert("No data to download!");
-      return;
-    }
+  document
+    .getElementById("download-csv")
+    .addEventListener("click", function () {
+      if (filteredData.length === 0) {
+        alert("No data to download!");
+        return;
+      }
 
-    const csvContent = convertToCSV(filteredData);
+      const csvContent = convertToCSV(filteredData);
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "filtered_data.csv";
-    a.style.display = "none";
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "filtered_data.csv";
+      a.style.display = "none";
 
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
 });
