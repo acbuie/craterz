@@ -50,6 +50,14 @@ noUiSlider.create(angleSlider, {
     min: 0,
     max: 180,
   },
+  format: {
+    to: (v) => {
+      return ~~v;
+    },
+    from: (v) => {
+      return Number(v);
+    },
+  },
 });
 
 export { diameterSlider, eccenSlider, ellipSlider, angleSlider };
