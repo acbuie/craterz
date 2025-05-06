@@ -11,13 +11,13 @@ function toggleSelection(label, selectedSet, callback) {
   const wasSelected = selectedSet.has(label);
   // If the label is already selected, remove it from the set
   if (wasSelected) {
-      selectedSet.delete(label);
+    selectedSet.delete(label);
   } else {
-      selectedSet.add(label);
+    selectedSet.add(label);
   }
 
   if (typeof callback === "function") {
-      callback(Array.from(selectedSet));
+    callback(Array.from(selectedSet));
   }
 }
 
