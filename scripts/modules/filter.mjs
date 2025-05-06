@@ -1,4 +1,9 @@
-import { diameterSlider, ellipSlider, eccenSlider } from "./slider.mjs";
+import {
+  diameterSlider,
+  ellipSlider,
+  eccenSlider,
+  angleSlider,
+} from "./slider.mjs";
 
 function toggleSelection(label, selectedSet, callback) {
   const wasSelected = selectedSet.has(label);
@@ -55,7 +60,7 @@ function updateFilter(filterList) {
   filterList.diam = diameterSlider.noUiSlider.get(true);
   filterList.eccen = eccenSlider.noUiSlider.get(true);
   filterList.ellip = ellipSlider.noUiSlider.get(true);
-  // filterList.angle = null;
+  filterList.angle = angleSlider.noUiSlider.get(true);
   // filterList.layNum = null;
   // filterList.layMorph1 = null;
   // filterList.layMorph2 = null;
