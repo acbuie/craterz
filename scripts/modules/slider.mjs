@@ -32,7 +32,7 @@ noUiSlider.create(eccenSlider, {
 });
 
 noUiSlider.create(ellipSlider, {
-  start: [1, 10],
+  start: [1, 3],
   connect: true,
   tooltips: [true, true],
   range: {
