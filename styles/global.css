@@ -28,18 +28,20 @@ body {
   grid-column: 1;
   display: flex;
   flex-direction: column;
-  gap: 0px;
+  /* gap: 10px; */
   background-color: #f0f0f0;
   padding: 20px;
   border-right: 1px solid #ccc;
 }
 
 .filter-content {
-  padding-left: 1ch;
+  display: flex;
+  flex-direction: column;
+  padding: 1ch 1em;
+  gap: 1em;
 }
 
 .filter-row {
-  padding-top: 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -51,9 +53,8 @@ body {
   font-weight: bold;
 }
 
-
 .filter-row .slider {
-  width: 65%;
+  width: 70%;
   height: 10px;
   /* padding: 1 10px; */
 }
@@ -75,8 +76,8 @@ body {
 }
 
 .filter-toggle {
-  background-color: #e0e0e0;   /* Light gray background */
-  border: 1px solid #666;      /* Dark gray border */
+  background-color: #e0e0e0; /* Light gray background */
+  border: 1px solid #666; /* Dark gray border */
   font-size: 1.125em;
   font-weight: bold;
   text-align: left;
@@ -88,7 +89,7 @@ body {
 }
 
 .filter-toggle:hover {
-  background-color: #d0d0d0;   /* Slightly darker on hover */
+  background-color: #d0d0d0; /* Slightly darker on hover */
 }
 .filter-toggle:focus {
   outline: none;
@@ -99,7 +100,6 @@ body {
   font-size: 1.125em;
   font-weight: bold;
 }
-
 
 .filter-subgroup .filter-toggle {
   background-color: lightred;
@@ -126,7 +126,6 @@ body {
 #filter-update:hover {
   background-color: #0056b3;
 }
-
 
 .noUi-tooltip {
   display: none;
@@ -182,7 +181,7 @@ body {
   background-color: #fdf5e6;
   max-height: 400px;
   overflow: auto;
-  border: 2px dashed red; /* for debugging visibility */
+  /* border: 2px dashed red; /* for debugging visibility */
 }
 
 #pagination {
@@ -236,3 +235,4 @@ body {
   background-color: #ddd;
   border-radius: 4px;
 }
+
