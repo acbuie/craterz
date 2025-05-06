@@ -5,7 +5,7 @@ import {
   drawEllipse,
 } from "./modules/map.mjs";
 
-import { filterAllDims, toggleSelection } from "./modules/filter.mjs";
+import { filterAllDims } from "./modules/filter.mjs";
 
 import { formatColumnHeader, updatePage } from "./modules/table.mjs";
 import { convertToCSV } from "./modules/csv.mjs";
