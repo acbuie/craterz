@@ -5,7 +5,7 @@ import {
   drawEllipse,
 } from "./modules/map.mjs";
 
-import { filterAllDims } from "./modules/filter.mjs";
+import { filterAllDims, FILTER, updateFilter } from "./modules/filter.mjs";
 
 import { formatColumnHeader, updatePage } from "./modules/table.mjs";
 import { convertToCSV } from "./modules/csv.mjs";
@@ -114,8 +114,12 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
 
   // Update filter on button click
   document.getElementById("filter-update").addEventListener("click", () => {
+    let filterList = updateFilter(FILTER);
+
+    // FIXME: I am certain there is a better way to do this
+    // This allows the filters to "grow" in scope once the data has shrunk.
     const ndx = crossfilter(data);
-    filteredData = filterAllDims(ndx);
+    filteredData = filterAllDims(ndx, filterList);
 
     filteredData.sort(
       (a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG),
@@ -128,7 +132,8 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
       .getElementById("table-container")
       .scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
-    // NOTE: Recreate data table
+    // FIXME: Recreate data table
+    // I'm not sure why this is necessary either but it works
     craterTable
       .dimension(allDims)
       .group(() => "")
