@@ -6,15 +6,18 @@ const categoryFilters = {
   // Add more keys as needed
 };
 
-function toggleCategoryFilter(category, value) {
-  if (!categoryFilters[category]) {
-    categoryFilters[category] = new Set();
+
+function toggleSelection(label, selectedSet, callback) {
+  const wasSelected = selectedSet.has(label);
+  // If the label is already selected, remove it from the set
+  if (wasSelected) {
+      selectedSet.delete(label);
+  } else {
+      selectedSet.add(label);
   }
 
-  if (categoryFilters[category].has(value)) {
-    categoryFilters[category].delete(value); // Deselect
-  } else {
-    categoryFilters[category].add(value); // Select
+  if (typeof callback === "function") {
+      callback(Array.from(selectedSet));
   }
 }
 
@@ -78,4 +81,4 @@ function filterAllDims(ndx, filter) {
   return filteredData;
 }
 
-export { filterAllDims, toggleCategoryFilter };
+export { filterAllDims, toggleSelection };
