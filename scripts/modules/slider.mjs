@@ -1,6 +1,7 @@
 var diameterSlider = document.getElementById("diameter-slider");
 var eccenSlider = document.getElementById("eccen-slider");
 var ellipSlider = document.getElementById("ellip-slider");
+var angleSlider = document.getElementById("angle-slider");
 
 noUiSlider.create(diameterSlider, {
   start: [10, 1000],
@@ -37,8 +38,18 @@ noUiSlider.create(ellipSlider, {
   tooltips: [true, true],
   range: {
     min: 1,
-    max: 10,
+    max: 3,
   },
 });
 
-export { diameterSlider, eccenSlider, ellipSlider };
+noUiSlider.create(angleSlider, {
+  start: [0, 180],
+  connect: true,
+  tooltips: [true, true],
+  range: {
+    min: 0,
+    max: 180,
+  },
+});
+
+export { diameterSlider, eccenSlider, ellipSlider, angleSlider };
