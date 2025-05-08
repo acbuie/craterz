@@ -223,10 +223,10 @@ body {
   font-size: 14px;
 }
 
-#pie-chart-container {
+.pie-chart-container {
   margin-bottom: 12px;
 }
-#pie-chart-container path {
+.pie-chart-container path {
   pointer-events: all;
   cursor: pointer;
 }
@@ -236,9 +236,4 @@ body {
   border-radius: 4px;
 }
 
-/* .dc-html-legend .dc-html-legend-selected {
-  font-weight: bold;
-  background-color: #eef;
-  border-radius: 4px;
-} */
 

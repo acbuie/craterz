@@ -1,17 +1,31 @@
 import { toggleSelection } from "./filter.mjs";
 
 function renderPieChart(filteredData, key, onSelectCategory) {
+    // Dynamically create div names for pie chart and legend
+    const chartDivName = `#pie-chart-container-${key}`;
+    const legendDivName = `#pie-chart-legend-${key}`;
 
+    console.log("Chart div name:", chartDivName);
+    console.log("Legend div name:", legendDivName);
     let ndx = crossfilter(filteredData);
     const selectedLabels = new Set();
 
-    const pieDim = ndx.dimension(d => d["INT_MORPH1"] || "NA");
+    const pieDim = ndx.dimension(d => d[key] || "NA");
     const pieGroup = pieDim.group().reduceCount();
-    const paper_group = "marker-select";
-    const pieChart = dc.pieChart("#pie-chart-container");
+    const pieChart = dc.pieChart(chartDivName);
 
-    dc.config.defaultColors(d3.schemeSet3);
+    // FIXME: Trying to get the color scale to work with the pie chart
+    // // const domain = Array.from(new Set(filteredData.map(d => d[key] || "NA")));
+    // // const colorScale = d3.scaleOrdinal(d3.schemeSet3).domain(domain);
+    // console.log(dc.config.defaultColors(d3.schemeCategory10));
+    // console.log(d3.schemeSet3);
 
+    // const domain = Array.from(new Set(filteredData.map(d => d[key] || "NA")));
+
+    // const myColorScale = d3.scaleOrdinal()
+    //     .domain(domain)
+    //     .range(d3.schemeCategory10);
+    dc.config.defaultColors(d3.schemeSet1);
     pieChart
         .width(150)
         .height(150)
@@ -20,8 +34,7 @@ function renderPieChart(filteredData, key, onSelectCategory) {
         .transitionDuration(0)
         .legend(
             new dc.HtmlLegend()
-                .container("#pie-chart-legend")
-                // .legendItemClass("dc-legend-item")
+                .container(legendDivName)
                 .highlightSelected(true)
                 .horizontal(false)
                 .legendText(d => `${d.name} (${d.data})`)
@@ -32,10 +45,8 @@ function renderPieChart(filteredData, key, onSelectCategory) {
                 console.log("Clicked on:", label);
                 toggleSelection(label, selectedLabels, onSelectCategory);
             });
-            d3.selectAll("#pie-chart-legend .dc-legend-item-vertical")
+            d3.selectAll(`${legendDivName} .dc-legend-item-vertical`)
                 .on("click", function (event) {
-                    // d3.select(this).classed("dc-html-legend-selected", wasSelected => !wasSelected);
-
                     const label = event.name || event.key;
                     pieChart.filter(label);
                     console.log("Clicked on legend item:", label);
