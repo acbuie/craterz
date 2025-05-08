@@ -1,14 +1,14 @@
 import { toggleSelection } from "./filter.mjs";
 
 function renderPieChart(filteredData, key, onSelectCategory) {
-    
+
     let ndx = crossfilter(filteredData);
     const selectedLabels = new Set();
 
     const pieDim = ndx.dimension(d => d["INT_MORPH1"] || "NA");
     const pieGroup = pieDim.group().reduceCount();
     const paper_group = "marker-select";
-    const pieChart = dc.pieChart("#pie-chart-container", paper_group);
+    const pieChart = dc.pieChart("#pie-chart-container");
 
     dc.config.defaultColors(d3.schemeSet3);
 
@@ -17,33 +17,35 @@ function renderPieChart(filteredData, key, onSelectCategory) {
         .height(150)
         .dimension(pieDim)
         .group(pieGroup)
-        // .transitionDuration(0)
+        .transitionDuration(0)
         .legend(
             new dc.HtmlLegend()
                 .container("#pie-chart-legend")
-                .horizontal(false)
+                // .legendItemClass("dc-legend-item")
                 .highlightSelected(true)
+                .horizontal(false)
                 .legendText(d => `${d.name} (${d.data})`)
         )
         .on("pretransition", chart => {
-            // Attach click handler to slices
-            chart.selectAll("g.pie-slice").on("click", function(event) {
+            chart.selectAll("g.pie-slice").on("click", function (event) {
                 const label = event.data?.key || event.key;
                 console.log("Clicked on:", label);
                 toggleSelection(label, selectedLabels, onSelectCategory);
             });
+            d3.selectAll("#pie-chart-legend .dc-legend-item-vertical")
+                .on("click", function (event) {
+                    // d3.select(this).classed("dc-html-legend-selected", wasSelected => !wasSelected);
 
-            // Attach click handler to legend items
-            // DOESN'T WORK!!!
-            d3.selectAll("#pie-chart-legend .dc-legend-item")
-              .on("click", function(event) {
-                  const label = event.name || event.key;
-                  toggleSelection(label, selectedLabels, onSelectCategory);
+                    const label = event.name || event.key;
+                    pieChart.filter(label);
+                    console.log("Clicked on legend item:", label);
+                    toggleSelection(label, selectedLabels, onSelectCategory);
+                    dc.renderAll();
                 });
-                
+
         });
 
-    dc.renderAll(paper_group);
+    dc.renderAll();
     return selectedLabels;
 }
 
