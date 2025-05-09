@@ -20,17 +20,6 @@ function renderPieChart(filteredData, key, onSelectCategory) {
 
     const pieChart = dc.pieChart(chartDivName);
 
-    // FIXME: Trying to get the color scale to work with the pie chart
-    // // const domain = Array.from(new Set(filteredData.map(d => d[key] || "NA")));
-    // // const colorScale = d3.scaleOrdinal(d3.schemeSet3).domain(domain);
-    // console.log(dc.config.defaultColors(d3.schemeCategory10));
-    // console.log(d3.schemeSet3);
-
-    // const domain = Array.from(new Set(filteredData.map(d => d[key] || "NA")));
-
-    // const myColorScale = d3.scaleOrdinal()
-    //     .domain(domain)
-    //     .range(d3.schemeCategory10);
     dc.config.defaultColors(d3.schemeSet1);
     pieChart
         .width(150)

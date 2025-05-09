@@ -101,11 +101,16 @@ body {
   font-weight: bold;
 }
 
+.filter-subgroup {
+  margin: 0;
+  padding: 0;
+}
+
 .filter-subgroup .filter-toggle {
   background-color: lightred;
   border: 1px solid #aaa;
   font-size: 1em;
-  margin-top: 5px;
+  /* margin-top: 5px; */
   padding: 6px 10px;
   cursor: pointer;
 }
@@ -233,8 +238,13 @@ body {
 
 [class^="pie-chart-legend-"],
 [id^="pie-chart-legend-"] {
-  max-height: 150px;
+  width: 200px;             /* fixed width */
+  max-height: 150px;        /* optional: scrollable height */
   overflow-y: auto;
+  overflow-x: hidden;       /* ensures long text wraps instead of scrolling horizontally */
+  word-wrap: break-word;    /* wrap long words if needed */
+  white-space: normal;      /* allow multi-line wrapping */
+  line-height: 1.4;         /* improves readability */
 }
 
 .legend-item.selected {
