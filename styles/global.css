@@ -231,9 +231,16 @@ body {
   cursor: pointer;
 }
 
+[class^="pie-chart-legend-"],
+[id^="pie-chart-legend-"] {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
 .legend-item.selected {
   background-color: #ddd;
   border-radius: 4px;
 }
+
 
 

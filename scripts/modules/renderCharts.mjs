@@ -8,7 +8,7 @@ function renderCharts(filteredData) {
     // "LAY_MORPH3",
     // "LAY_NOTES",
     "INT_MORPH1",
-    // "INT_MORPH2",
+    "INT_MORPH2",
     // "INT_MORPH3",
     // "CONF",
     "DEG_RIM",
@@ -26,8 +26,6 @@ function renderCharts(filteredData) {
   
     selectedLabelMap[key] = selectedLabels; // Store the Set
  });
-  // I don't know how to console.log dynamically
-  console.log(selectedLabelMap);
   
 }
 export { renderCharts };
