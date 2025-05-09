@@ -1,9 +1,17 @@
 import { toggleSelection } from "./filter.mjs";
+import { explodeColumn } from "./utils.mjs";
 
 function renderPieChart(filteredData, key, onSelectCategory) {
     // Dynamically create div names for pie chart and legend
     const chartDivName = `#pie-chart-container-${key}`;
     const legendDivName = `#pie-chart-legend-${key}`;
+
+    // @Aidan For now, apply this logic to all pie charts. Comment out if you don't want to filter the "contains" data.
+    // if (key == "INT_MORPH3") {
+    const longData = explodeColumn(filteredData, key);
+    console.log("Long data:", longData);
+    filteredData = longData;
+    // }
 
     let ndx = crossfilter(filteredData);
     const selectedLabels = new Set();
@@ -22,8 +30,8 @@ function renderPieChart(filteredData, key, onSelectCategory) {
 
     dc.config.defaultColors(d3.schemeSet1);
     pieChart
-        .width(150)
-        .height(150)
+        .width(175)
+        .height(175)
         .dimension(pieDim)
         .group(pieGroup)
         .transitionDuration(0)

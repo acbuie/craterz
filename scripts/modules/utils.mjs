@@ -13,4 +13,17 @@ function flatten(obj) {
   return result;
 }
 
-export { flatten };
+// Explode a column into multiple rows based on a separator
+// Use case: Columns that have multiple types, like INT_MORPH3
+function explodeColumn(data, key, separator = " / ") {
+  return data.flatMap(row => {
+    const raw = row[key];
+    const rawStr = raw !== undefined && raw !== null ? raw.toString() : "";
+    const parts = rawStr
+      ? rawStr.split(separator).map(s => s.trim())
+      : ["NA"];
+    return parts.map(part => ({ ...row, [key]: part }));
+  });
+}
+
+export { flatten , explodeColumn };
