@@ -20,9 +20,18 @@ dataWrapper.ellipseMap = {};
 
 // Setup map baselayer
 let mapObject = configureMap("map");
+const stringColumns = ["LAY_NUMBER", "CONF", "DEG_RIM", "DEG_EJC", "DEG_FLR"];
 
-// Load crater data
-d3.csv("data/sample.csv", d3.autoType).then(function (data) {
+// Load crater data, convert ordinal variables to strings for easier filtering
+d3.csv("data/sample.csv", d3.autoType).then(data => {
+  data.forEach(row => {
+    stringColumns.forEach(col => {
+      if (row[col] !== undefined && row[col] !== null) {
+        row[col] = row[col].toString();
+      }
+    });
+  });
+
   // Crossfilter + DC setup
   const ndx = crossfilter(data);
   const allDims = ndx.dimension((d) => d);
