@@ -5,13 +5,19 @@ function renderPieChart(filteredData, key, onSelectCategory) {
     const chartDivName = `#pie-chart-container-${key}`;
     const legendDivName = `#pie-chart-legend-${key}`;
 
-    console.log("Chart div name:", chartDivName);
-    console.log("Legend div name:", legendDivName);
     let ndx = crossfilter(filteredData);
     const selectedLabels = new Set();
 
-    const pieDim = ndx.dimension(d => d[key] || "NA");
+    // Accomodate both string and number keys
+    const pieDim = ndx.dimension(d => {
+        const val = d[key];
+        return val !== undefined && val !== null ? val.toString() : "NA";
+    });
+    console.log("Pie dimension:", pieDim);
+
     const pieGroup = pieDim.group().reduceCount();
+    console.log("Pie group:", pieGroup.all());
+
     const pieChart = dc.pieChart(chartDivName);
 
     // FIXME: Trying to get the color scale to work with the pie chart

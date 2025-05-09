@@ -1,10 +1,33 @@
 import { renderPieChart } from "./pieChartDC.mjs";
 
 function renderCharts(filteredData) {
-  // renderPieChart("pie-chart-container", filteredData, "INT_MORPH1", (label) => {
-  //   console.log("You clicked on:", label);
-  const selectedLabels = renderPieChart(filteredData, "INT_MORPH1", label => {
-    console.log("You clicked on:", selectedLabels);
-  });
+  const columnNames = [
+    // "LAY_NUMBER",
+    // "LAY_MORPH1",
+    // "LAY_MORPH2",
+    // "LAY_MORPH3",
+    // "LAY_NOTES",
+    "INT_MORPH1",
+    // "INT_MORPH2",
+    // "INT_MORPH3",
+    // "CONF",
+    "DEG_RIM",
+    // "DEG_EJC",
+    // "DEG_FLR"
+  ];
+
+  const selectedLabelMap = {};
+
+  columnNames.forEach(key => {
+    const selectedLabels = renderPieChart(filteredData, key, labels => {
+      console.log(`You clicked on ${key}:`, labels);
+      console.log(selectedLabelMap, `now selected`);
+    });
+  
+    selectedLabelMap[key] = selectedLabels; // Store the Set
+ });
+  // I don't know how to console.log dynamically
+  console.log(selectedLabelMap);
+  
 }
 export { renderCharts };

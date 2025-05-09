@@ -32,6 +32,9 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
   // Initial page load
   let filteredData = filterAllDims(ndx);
 
+  // TEMPORARY: Work with 10k rows instead of 1k rows to test out performance on larger dataset
+  filteredData = filteredData.slice(0, 10000);
+  
   // Sort largest to smallest so small craters appear on top
   filteredData.sort(
     (a, b) => parseFloat(b.DIAM_CIRC_IMG) - parseFloat(a.DIAM_CIRC_IMG),
@@ -48,6 +51,8 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
 
   // Initial chart setup
   renderCharts(filteredData);
+
+
 
   ellipseGroup.addTo(mapObject);
   let selectedEllipse = null;
