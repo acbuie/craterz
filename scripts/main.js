@@ -23,8 +23,6 @@ let mapObject = configureMap("map");
 
 // Load crater data
 d3.csv("data/sample.csv", d3.autoType).then(function (data) {
-  // Filter on `Update Filter` button
-
   // Crossfilter + DC setup
   const ndx = crossfilter(data);
   const allDims = ndx.dimension((d) => d);
@@ -49,11 +47,11 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
     dataWrapper.ellipseMap[row.CRATER_ID] = ellipse;
   });
 
-  // Initial chart setup
-  renderCharts(filteredData);
-
   ellipseGroup.addTo(mapObject);
   let selectedEllipse = null;
+
+  // Initial chart setup
+  let selectedLabelMap = renderCharts(filteredData);
 
   const craterTable = dc.dataTable("#table");
 
@@ -117,7 +115,7 @@ d3.csv("data/sample.csv", d3.autoType).then(function (data) {
 
   // Update filter on button click
   document.getElementById("filter-update").addEventListener("click", () => {
-    let filterList = updateFilter(FILTER);
+    let filterList = updateFilter(FILTER, selectedLabelMap);
 
     // FIXME: I am certain there is a better way to do this
     // This allows the filters to "grow" in scope once the data has shrunk.

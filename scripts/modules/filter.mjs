@@ -19,15 +19,21 @@ function toggleSelection(label, selectedSet, callback) {
   }
 }
 
-const ejectaLookup = {};
+function multivalueFitler(values) {
+  return function (v) {
+    return values.indexOf(v) !== -1;
+  };
+}
 
-const interiorLookup = {
-  Cpx: "Complex",
-  Smp: "Simple",
-  FF: "Flat Floor",
-  FP: "Flat Floor - Pristine",
-  CPt: "Central Peak",
-}; // TODO: Work in progress, need to parse .csv for all options
+// const ejectaLookup = {};
+//
+// const interiorLookup = {
+//   Cpx: "Complex",
+//   Smp: "Simple",
+//   FF: "Flat Floor",
+//   FP: "Flat Floor - Pristine",
+//   CPt: "Central Peak",
+// }; // TODO: Work in progress, need to parse .csv for all options
 
 var FILTER = {
   id: null,
@@ -52,7 +58,7 @@ var FILTER = {
   degFlr: null,
 };
 
-function updateFilter(filterList) {
+function updateFilter(filterList, dcData) {
   // TODO: Update with getter functions as they begin to exist
   // filterList.id = null
   // filterList.lat = null
@@ -62,19 +68,20 @@ function updateFilter(filterList) {
   filterList.ellip = ellipSlider.noUiSlider.get(true);
   filterList.angle = angleSlider.noUiSlider.get(true);
   // filterList.layNum = null;
-  // filterList.layMorph1 = null;
+  // filterList.layMorph1 = dcData[];
   // filterList.layMorph2 = null;
   // filterList.layMorph3 = null;
   // filterList.layNotes = null;
-  // filterList.intMorph1 = null;
-  // filterList.intMorph2 = null;
-  // filterList.intMorph3 = null;
+  filterList.intMorph1 = [...dcData.INT_MORPH1]; // Convert set to list
+  filterList.intMorph2 = [...dcData.INT_MORPH2];
+  filterList.intMorph3 = [...dcData.INT_MORPH3];
   // filterList.conf = null;
   // filterList.notes = null;
-  // filterList.degRim = null;
+  filterList.degRim = [...dcData.DEG_RIM];
   // filterList.degEjc = null;
   // filterList.degFlr = null;
 
+  console.log(filterList);
   return filterList;
 }
 
@@ -137,14 +144,14 @@ function filterAllDims(ndx, filterList = FILTER) {
   if (filterList.layNotes) {
     layNotesDim.filter(filterList.layNotes);
   }
-  if (filterList.intMorph1) {
-    intMorph1Dim.filter(filterList.intMorph1);
+  if (filterList.intMorph1 && filterList.intMorph1.length !== 0) {
+    intMorph1Dim.filterFunction(multivalueFitler(filterList.intMorph1));
   }
-  if (filterList.intMorph2) {
-    intMorph2Dim.filter(filterList.intMorph2);
+  if (filterList.intMorph2 && filterList.intMorph2.length !== 0) {
+    intMorph2Dim.filterFunction(multivalueFitler(filterList.intMorph2));
   }
-  if (filterList.intMorph3) {
-    intMorph3Dim.filter(filterList.intMorph3);
+  if (filterList.intMorph3 && filterList.intMorph3.length !== 0) {
+    intMorph3Dim.filterFunction(multivalueFitler(filterList.intMorph3));
   }
   if (filterList.conf) {
     confDim.filter(filterList.conf);
@@ -152,8 +159,8 @@ function filterAllDims(ndx, filterList = FILTER) {
   if (filterList.notes) {
     notesDim.filter(filterList.notes);
   }
-  if (filterList.degRim) {
-    degRimDim.filter(filterList.degRim);
+  if (filterList.degRim && filterList.degRim.length !== 0) {
+    degRimDim.filterFunction(multivalueFitler(filterList.degRim));
   }
   if (filterList.degEjc) {
     degEjcDim.filter(filterList.degEjc);

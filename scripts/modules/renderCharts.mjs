@@ -1,4 +1,5 @@
 import { renderPieChart } from "./pieChartDC.mjs";
+
 //@Aidan if you want to test out just one or two pie charts, you can comment out the rest of the column names in the array below
 function renderCharts(filteredData) {
   const columnNames = [
@@ -20,11 +21,14 @@ function renderCharts(filteredData) {
 
   columnNames.forEach((key) => {
     const selectedLabels = renderPieChart(filteredData, key, (labels) => {
-      console.log(`You clicked on ${key}:`, labels);
-      console.log(selectedLabelMap, `now selected`);
+      // console.log(`You clicked on ${key}:`, labels);
+      // console.log(selectedLabelMap, `now selected`);
     });
 
     selectedLabelMap[key] = selectedLabels;
   });
+
+  return selectedLabelMap;
 }
+
 export { renderCharts };
