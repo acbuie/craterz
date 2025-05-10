@@ -26,4 +26,14 @@ function explodeColumn(data, key, separator = " / ") {
   });
 }
 
-export { flatten , explodeColumn };
+function standardizeMissingValues(data, keys, NA_name = "NA") {
+  data.forEach(row => {
+    keys.forEach(key => {
+      if (row[key] === undefined || row[key] === null || row[key] === "") {
+        row[key] = NA_name;
+      }
+    });
+  });
+}
+
+export { flatten , explodeColumn, standardizeMissingValues };

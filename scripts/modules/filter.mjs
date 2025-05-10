@@ -19,7 +19,7 @@ function toggleSelection(label, selectedSet, callback) {
   }
 }
 
-function multivalueFitler(values) {
+function multivalueFilter(values) {
   return function (v) {
     return values.indexOf(v) !== -1;
   };
@@ -145,13 +145,13 @@ function filterAllDims(ndx, filterList = FILTER) {
     layNotesDim.filter(filterList.layNotes);
   }
   if (filterList.intMorph1 && filterList.intMorph1.length !== 0) {
-    intMorph1Dim.filterFunction(multivalueFitler(filterList.intMorph1));
+    intMorph1Dim.filterFunction(multivalueFilter(filterList.intMorph1));
   }
   if (filterList.intMorph2 && filterList.intMorph2.length !== 0) {
-    intMorph2Dim.filterFunction(multivalueFitler(filterList.intMorph2));
+    intMorph2Dim.filterFunction(multivalueFilter(filterList.intMorph2));
   }
   if (filterList.intMorph3 && filterList.intMorph3.length !== 0) {
-    intMorph3Dim.filterFunction(multivalueFitler(filterList.intMorph3));
+    intMorph3Dim.filterFunction(multivalueFilter(filterList.intMorph3));
   }
   if (filterList.conf) {
     confDim.filter(filterList.conf);
@@ -160,7 +160,7 @@ function filterAllDims(ndx, filterList = FILTER) {
     notesDim.filter(filterList.notes);
   }
   if (filterList.degRim && filterList.degRim.length !== 0) {
-    degRimDim.filterFunction(multivalueFitler(filterList.degRim));
+    degRimDim.filterFunction(multivalueFilter(filterList.degRim));
   }
   if (filterList.degEjc) {
     degEjcDim.filter(filterList.degEjc);

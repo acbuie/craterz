@@ -35,6 +35,7 @@ function renderPieChart(filteredData, key, onSelectCategory) {
     .dimension(pieDim)
     .group(pieGroup)
     .transitionDuration(0)
+    .renderLabel(false) // Temporary fix for fixing bug that prevents the clcick from being registered if you click on the label
     .legend(
       new dc.HtmlLegend()
         .container(legendDivName)
