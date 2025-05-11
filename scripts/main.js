@@ -20,22 +20,31 @@ dataWrapper.ellipseMap = {};
 
 // Setup map baselayer
 let mapObject = configureMap("map");
-const stringColumns = ["LAY_NUMBER", "CONF", "DEG_RIM", "DEG_EJC", "DEG_FLR"];
+const stringColumns = [
+    "LAY_NUMBER",
+    "LAY_MORPH1",
+    "LAY_MORPH2",
+    "LAY_MORPH3",
+    "INT_MORPH1",
+    "INT_MORPH2",
+    "INT_MORPH3",
+    "CONF",
+    "DEG_RIM",
+    "DEG_EJC",
+    "DEG_FLR"
+  ];
 
-// Load crater data, convert ordinal variables to strings for easier filtering
 d3.csv("data/sample.csv", d3.autoType).then(data => {
   data.forEach(row => {
     stringColumns.forEach(col => {
-      if (row[col] !== undefined && row[col] !== null) {
-        row[col] = row[col].toString();
+      const value = row[col];
+      if (value === undefined || value === null || value === "") {
+        row[col] = "NA"; // Standardize missing values
+      } else {
+        row[col] = value.toString(); // Coerce to string for consistency
       }
     });
   });
-  // data = standardizeMissingValues(data, [
-  //   "LAY_MORPH1", "LAY_MORPH2", "LAY_MORPH3",
-  //   "INT_MORPH1", "INT_MORPH2", "INT_MORPH3",
-  //   "CONF", "NOTES", "DEG_RIM", "DEG_EJC", "DEG_FLR"
-  // ]);
   // Crossfilter + DC setup
   const ndx = crossfilter(data);
   const allDims = ndx.dimension((d) => d);
