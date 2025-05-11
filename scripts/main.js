@@ -138,9 +138,35 @@ d3.csv("data/sample.csv", d3.autoType).then((data) => {
     }
   });
 
-  // Update filter on button click
-  document.getElementById("filter-update").addEventListener("click", () => {
+  function filterReloadData(reset) {
     let filterList = updateFilter(FILTER, selectedLabelMap);
+
+    // TODO: Janky as hell
+    // This does not reset the sliders or chart selections
+    if (reset) {
+      filterList = {
+        id: null,
+        lat: null,
+        lon: null,
+        diam: null,
+        eccen: null,
+        ellip: null,
+        angle: null,
+        layNum: null,
+        layMorph1: null,
+        layMorph2: null,
+        layMorph3: null,
+        layNotes: null,
+        intMorph1: null,
+        intMorph2: null,
+        intMorph3: null,
+        conf: null,
+        notes: null,
+        degRim: null,
+        degEjc: null,
+        degFlr: null,
+      };
+    }
 
     // FIXME: I am certain there is a better way to do this
     // This allows the filters to "grow" in scope once the data has shrunk.
@@ -205,6 +231,15 @@ d3.csv("data/sample.csv", d3.autoType).then((data) => {
       drawEllipse(ellipseGroup, row, formatColumnHeader());
     });
     ellipseGroup.addTo(mapObject);
+  }
+
+  // Update filter on button click
+  document.getElementById("filter-update").addEventListener("click", (_) => {
+    filterReloadData(false);
+  });
+
+  document.getElementById("filter-reset").addEventListener("click", (_) => {
+    filterReloadData(true);
   });
 
   // Export to CSV

@@ -143,44 +143,39 @@ body {
   /* space between buttons */
 }
 
-
-#filter-update {
+.button-row button {
   margin-top: 16px;
-  /* or whatever size you want */
   padding: 6px 12px;
   font-size: 14px;
   font-weight: bold;
-  background-color: #007bff;
   color: white;
-  border: none;
+  border: 1px solid grey;
   border-radius: 4px;
   cursor: pointer;
   align-self: flex-start;
-  /* keeps button left-aligned in flex container */
+}
+
+#filter-update {
+  background-color: #007bff;
 }
 
 #filter-update:hover {
   background-color: #0056b3;
 }
 
+#filter-reset {
+  color: grey;
+  border: 1px solid grey;
+  background-color: transparent;
+}
 
 #download-csv {
-  margin-top: 16px;
-  padding: 6px 12px;
-  font-size: 14px;
-  font-weight: bold;
   background-color: #6c757d;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  align-self: flex-start;
 }
 
 #download-csv:hover {
   background-color: #5a6268;
 }
-
 
 .noUi-tooltip {
   display: none;
@@ -310,3 +305,4 @@ body {
   background-color: #ddd;
   border-radius: 4px;
 }
+
