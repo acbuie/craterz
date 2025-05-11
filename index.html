@@ -124,10 +124,54 @@
       </button>
       <div class="collapse" id="ejecta-filters">
         <div class="filter-content">
-          <div class="filter-row">Layers</div>
-          <div class="filter-row">Classification</div>
-          <div class="filter-row">Texture</div>
-          <div class="filter-row">Shape</div>
+          <div class="filter-subgroup">
+            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#LAY_NUMBER-pie"
+              aria-expanded="false">
+              Layers
+            </button>
+            <div class="collapse" id="LAY_NUMBER-pie">
+              <div class="filter-row">
+                <div id="pie-chart-container-LAY_NUMBER" class="pie-chart-container"></div>
+                <div id="pie-chart-legend-LAY_NUMBER"></div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-subgroup">
+            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#LAY_MORPH1-pie"
+              aria-expanded="false">
+              Classification
+            </button>
+            <div class="collapse" id="LAY_MORPH1-pie">
+              <div class="filter-row">
+                <div id="pie-chart-container-LAY_MORPH1" class="pie-chart-container"></div>
+                <div id="pie-chart-legend-LAY_MORPH1"></div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-subgroup">
+            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#LAY_MORPH2-pie"
+              aria-expanded="false">
+              Texture
+            </button>
+            <div class="collapse" id="LAY_MORPH2-pie">
+              <div class="filter-row">
+                <div id="pie-chart-container-LAY_MORPH2" class="pie-chart-container"></div>
+                <div id="pie-chart-legend-LAY_MORPH2"></div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-subgroup">
+            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#LAY_MORPH3-pie"
+              aria-expanded="false">
+              Shape
+            </button>
+            <div class="collapse" id="LAY_MORPH3-pie">
+              <div class="filter-row">
+                <div id="pie-chart-container-LAY_MORPH3" class="pie-chart-container"></div>
+                <div id="pie-chart-legend-LAY_MORPH3"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -230,7 +274,18 @@
       </button>
       <div class="collapse" id="misc-filters">
         <div class="filter-content">
-          <div class="filter-row">Confidence</div>
+          <div class="filter-subgroup">
+            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#CONF-pie"
+              aria-expanded="false">
+              Confidence
+            </button>
+            <div class="collapse" id="CONF-pie">
+              <div class="filter-row">
+                <div id="pie-chart-container-CONF" class="pie-chart-container"></div>
+                <div id="pie-chart-legend-CONF"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
