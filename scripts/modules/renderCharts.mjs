@@ -12,8 +12,8 @@ function renderCharts(filteredData) {
     "INT_MORPH3",
     // "CONF",
     "DEG_RIM",
-    // "DEG_EJC",
-    // "DEG_FLR"
+    "DEG_EJC",
+    "DEG_FLR"
   ];
 
   // This is the list of selected labels for each pie chart. Key is the column name, value is selectedLabels (as a Set)
