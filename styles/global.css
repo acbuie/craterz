@@ -1,8 +1,9 @@
 body {
   display: grid;
-  grid-template-rows: 5% 20% 45% 30%; /* Add a row for the title */
+  grid-template-rows: 5vh 20vh 45vh auto; /* only map row fixed */
   grid-template-columns: 30% 35% 35%; /* Maintain three columns */
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   margin: 0;
   font-family: Arial, sans-serif;
   outline: 2px solid lime;
@@ -184,7 +185,8 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #fdf5e6;
-  max-height: 400px;
+  min-height: 400px;
+  max-height: 900px;
   overflow: auto;
   /* border: 2px dashed red; /* for debugging visibility */
 }
