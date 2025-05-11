@@ -213,7 +213,12 @@
       </div>
     </div>
 
-    <button id="filter-update" type="submit">Update Filter</button>
+    <div class="button-row">
+      <button id="filter-update" type="submit">Update Filter</button>
+      <button id="download-csv" class="btn btn-info small-btn">
+        Download Data
+      </button>
+    </div>
   </div>
 
   <div id="map-container">
@@ -227,11 +232,8 @@
         <span id="page-info"></span>
         <button id="next">Next</button>
       </div>
-      <button id="download-csv" class="btn btn-info small-btn">
-        Download Data
-      </button>
       <h5>
-        <i> Scroll horizontally and vertically to view the whole table </i>
+        <i> Scroll horizontally and vertically to view whole table, click on a row to zoom to crater </i>
       </h5>
     </div>
     <table class="dc-data-table" id="table"></table>
