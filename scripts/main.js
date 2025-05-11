@@ -6,7 +6,6 @@ import {
 } from "./modules/map.mjs";
 
 import { filterAllDims, FILTER, updateFilter } from "./modules/filter.mjs";
-import { standardizeMissingValues } from "./modules/utils.mjs";
 
 import { formatColumnHeader, updatePage } from "./modules/table.mjs";
 import { convertToCSV } from "./modules/csv.mjs";
@@ -26,19 +25,16 @@ const stringColumns = ["LAY_NUMBER", "CONF", "DEG_RIM", "DEG_EJC", "DEG_FLR"];
 // Load crater data, convert ordinal variables to strings for easier filtering
 d3.csv("data/sample.csv", d3.autoType).then(data => {
   data.forEach(row => {
-    Object.keys(row).forEach(col => {
-      const value = row[col];
-      if (value === undefined || value === null || value === "") {
-        row[col] = "NA"; // Standardize all missing values
-      } else {
-        row[col] = value.toString(); // Coerce everything to string
+    stringColumns.forEach(col => {
+      if (row[col] !== undefined && row[col] !== null) {
+        row[col] = row[col].toString();
       }
     });
   });
   // data = standardizeMissingValues(data, [
-  //   // "LAY_MORPH1", "LAY_MORPH2", "LAY_MORPH3",
-  //   // "INT_MORPH1", "INT_MORPH2", "INT_MORPH3",
-  //   "CONF"//, "NOTES", "DEG_RIM", "DEG_EJC", "DEG_FLR"
+  //   "LAY_MORPH1", "LAY_MORPH2", "LAY_MORPH3",
+  //   "INT_MORPH1", "INT_MORPH2", "INT_MORPH3",
+  //   "CONF", "NOTES", "DEG_RIM", "DEG_EJC", "DEG_FLR"
   // ]);
   // Crossfilter + DC setup
   const ndx = crossfilter(data);
