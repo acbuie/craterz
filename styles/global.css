@@ -52,6 +52,7 @@ body {
 .filter-row {
   display: flex;
   flex-direction: row;
+  padding: 1ch 1em;
   justify-content: space-between;
   align-items: center;
 }
@@ -290,12 +291,12 @@ body {
 
 [class^="pie-chart-legend-"],
 [id^="pie-chart-legend-"] {
-  width: 200px;
+  max-width: 150px;
   /* fixed width */
   max-height: 150px;
   /* optional: scrollable height */
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   /* ensures long text wraps instead of scrolling horizontally */
   word-wrap: break-word;
   /* wrap long words if needed */
