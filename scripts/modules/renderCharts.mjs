@@ -13,7 +13,7 @@ function renderCharts(filteredData) {
     "CONF",
     "DEG_RIM",
     "DEG_EJC",
-    "DEG_FLR"
+    "DEG_FLR",
   ];
 
   // This is the list of selected labels for each pie chart. Key is the column name, value is selectedLabels (as a Set)
@@ -21,8 +21,8 @@ function renderCharts(filteredData) {
 
   columnNames.forEach((key) => {
     const selectedLabels = renderPieChart(filteredData, key, (labels) => {
-      // console.log(`You clicked on ${key}:`, labels);
-      // console.log(selectedLabelMap, `now selected`);
+      console.log(`You clicked on ${key}:`, labels);
+      console.log(selectedLabelMap, `now selected`);
     });
 
     selectedLabelMap[key] = selectedLabels;

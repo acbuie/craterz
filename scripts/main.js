@@ -31,19 +31,19 @@ const stringColumns = [
   "CONF",
   "DEG_RIM",
   "DEG_EJC",
-  "DEG_FLR"
+  "DEG_FLR",
 ];
 
-d3.csv("data/sample.csv", d3.autoType).then(data => {
-  data.forEach(row => {
-    stringColumns.forEach(col => {
+d3.csv("data/sample.csv", d3.autoType).then((data) => {
+  data.forEach((row) => {
+    stringColumns.forEach((col) => {
       let value = row[col];
       // Normalize missing values to "NA"
       if (value === undefined || value === null || value === "") {
         row[col] = "NA";
       } else {
         // Coerce to string and normalize "A/B" to "A / B"
-        value = value.toString().replace(/([^ ])\/([^ ])/g, '$1 / $2');
+        value = value.toString().replace(/([^ ])\/([^ ])/g, "$1 / $2");
         row[col] = value;
       }
     });
