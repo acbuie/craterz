@@ -59,27 +59,26 @@ var FILTER = {
 };
 
 function updateFilter(filterList, dcData) {
-  // TODO: Update with getter functions as they begin to exist
-  // filterList.id = null
-  // filterList.lat = null
-  // filterList.lon = null
+  filterList.id = null; // TODO: Replace null with filters
+  filterList.lat = null;
+  filterList.lon = null;
   filterList.diam = diameterSlider.noUiSlider.get(true);
   filterList.eccen = eccenSlider.noUiSlider.get(true);
   filterList.ellip = ellipSlider.noUiSlider.get(true);
   filterList.angle = angleSlider.noUiSlider.get(true);
-  // filterList.layNum = null;
-  // filterList.layMorph1 = dcData[];
-  // filterList.layMorph2 = null;
-  // filterList.layMorph3 = null;
+  filterList.layNum = [...dcData.LAY_NUMBER];
+  filterList.layMorph1 = [...dcData.LAY_MORPH1];
+  filterList.layMorph2 = [...dcData.LAY_MORPH2];
+  filterList.layMorph3 = [...dcData.LAY_MORPH3];
   // filterList.layNotes = null;
-  filterList.intMorph1 = [...dcData.INT_MORPH1]; // Convert set to list
+  filterList.intMorph1 = [...dcData.INT_MORPH1];
   filterList.intMorph2 = [...dcData.INT_MORPH2];
   filterList.intMorph3 = [...dcData.INT_MORPH3];
-  // filterList.conf = null;
-  // filterList.notes = null;
+  filterList.conf = [...dcData.CONF];
+  filterList.notes = null;
   filterList.degRim = [...dcData.DEG_RIM];
-  // filterList.degEjc = null;
-  // filterList.degFlr = null;
+  filterList.degEjc = [...dcData.DEG_EJC];
+  filterList.degFlr = [...dcData.DEG_FLR];
 
   console.log(filterList);
   return filterList;
@@ -93,16 +92,16 @@ function filterAllDims(ndx, filterList = FILTER) {
     eccenDim = ndx.dimension((d) => +d.DIAM_ELLI_ECCEN_IMG),
     ellipDim = ndx.dimension((d) => +d.DIAM_ELLI_ELLIP_IMG),
     angleDim = ndx.dimension((d) => +d.DIAM_ELLI_ANGLE_IMG),
-    layNumDim = ndx.dimension((d) => +d.LAY_NUMBER),
+    layNumDim = ndx.dimension((d) => d.LAY_NUMBER),
     layMorph1Dim = ndx.dimension((d) => d.LAY_MORPH1),
     layMorph2Dim = ndx.dimension((d) => d.LAY_MORPH2),
     layMorph3Dim = ndx.dimension((d) => d.LAY_MORPH3),
-    layNotesDim = ndx.dimension((d) => d.LAY_NOTES),
+    // layNotesDim = ndx.dimension((d) => d.LAY_NOTES),
     intMorph1Dim = ndx.dimension((d) => d.INT_MORPH1),
     intMorph2Dim = ndx.dimension((d) => d.INT_MORPH2),
     intMorph3Dim = ndx.dimension((d) => d.INT_MORPH3),
     confDim = ndx.dimension((d) => d.CONF),
-    notesDim = ndx.dimension((d) => d.NOTES),
+    // notesDim = ndx.dimension((d) => d.NOTES),
     degRimDim = ndx.dimension((d) => d.DEG_RIM),
     degEjcDim = ndx.dimension((d) => d.DEG_EJC),
     degFlrDim = ndx.dimension((d) => d.DEG_FLR);
@@ -129,17 +128,17 @@ function filterAllDims(ndx, filterList = FILTER) {
   if (filterList.angle) {
     angleDim.filter(filterList.angle);
   }
-  if (filterList.layNum) {
-    layNumDim.filter(filterList.layNum);
+  if (filterList.layNum && filterList.layNum.length !== 0) {
+    layNumDim.filterFunction(multivalueFilter(filterList.layNum));
   }
-  if (filterList.layMorph1) {
-    layMorph1Dim.filter(filterList.layMorph1);
+  if (filterList.layMorph1 && filterList.layMorph1.length !== 0) {
+    layMorph1Dim.filterFunction(multivalueFilter(filterList.layMorph1));
   }
-  if (filterList.layMorph2) {
-    layMorph2Dim.filter(filterList.layMorph2);
+  if (filterList.layMorph2 && filterList.layMorph2.length !== 0) {
+    layMorph2Dim.filterFunction(multivalueFilter(filterList.layMorph2));
   }
-  if (filterList.layMorph3) {
-    layMorph3Dim.filter(filterList.layMorph3);
+  if (filterList.layMorph3 && filterList.layMorph3.length !== 0) {
+    layMorph3Dim.filterFunction(multivalueFilter(filterList.layMorph3));
   }
   if (filterList.layNotes) {
     layNotesDim.filter(filterList.layNotes);
@@ -153,8 +152,8 @@ function filterAllDims(ndx, filterList = FILTER) {
   if (filterList.intMorph3 && filterList.intMorph3.length !== 0) {
     intMorph3Dim.filterFunction(multivalueFilter(filterList.intMorph3));
   }
-  if (filterList.conf) {
-    confDim.filter(filterList.conf);
+  if (filterList.conf && filterList.conf.length !== 0) {
+    confDim.filterFunction(multivalueFilter(filterList.conf));
   }
   if (filterList.notes) {
     notesDim.filter(filterList.notes);
@@ -162,11 +161,11 @@ function filterAllDims(ndx, filterList = FILTER) {
   if (filterList.degRim && filterList.degRim.length !== 0) {
     degRimDim.filterFunction(multivalueFilter(filterList.degRim));
   }
-  if (filterList.degEjc) {
-    degEjcDim.filter(filterList.degEjc);
+  if (filterList.degEjc && filterList.degEjc.length !== 0) {
+    degEjcDim.filterFunction(multivalueFilter(filterList.degEjc));
   }
-  if (filterList.degFlr) {
-    degFlrDim.filter(filterList.degFlr);
+  if (filterList.degFlr && filterList.degFlr.length !== 0) {
+    degFlrDim.filterFunction(multivalueFilter(filterList.degFlr));
   }
 
   return ndx.allFiltered();
