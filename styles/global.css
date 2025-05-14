@@ -155,12 +155,37 @@ body {
   align-self: flex-start;
 }
 
+#button-container {
+  grid-row: 1;
+  grid-column: 1;
+  background-color: #f0f0f0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#modal-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #924737;
+  color: white;
+  border: 1px solid grey;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#modal-button:hover {
+  background-color: #76392c;
+}
+
 #filter-update {
-  background-color: #007bff;
+  background-color: #924737;
 }
 
 #filter-update:hover {
-  background-color: #0056b3;
+  background-color: #76392c;
 }
 
 #filter-reset {
@@ -248,18 +273,6 @@ body {
   justify-content: space-between;
 }
 
-#button-container {
-  grid-row: 1;
-  grid-column: 1;
-  background-color: #f0f0f0;
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding-left: 20px;
-  /* padding-top: 10px; */
-}
-
 .small-btn {
   padding: 2px 10px;
   font-size: 14px;
@@ -304,5 +317,15 @@ body {
 .legend-item.selected {
   background-color: #ddd;
   border-radius: 4px;
+}
+
+h4 {
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+h5 {
+  font-size: 14pt;
+  font-weight: bold;
 }
 

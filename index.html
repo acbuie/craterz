@@ -25,7 +25,7 @@
 <body>
   <div id="title">Mars Global Crater Database</div>
   <div id="button-container">
-    <button type="button" class="btn btn-info btn-lg small-btn" data-toggle="modal" data-target="#myModal_lg">
+    <button type="button" id="modal-button" class="btn btn-info small-btn" data-toggle="modal" data-target="#myModal_lg">
       Click here to learn more about this web app!
     </button>
 
@@ -38,9 +38,14 @@
             <button type="button" class="close" data-dismiss="modal">
               &times;
             </button>
-            <h4 class="modal-title">About this tool</h4>
+            <h4 class="modal-title">About This Web App</h4>
           </div>
           <div class="modal-body">
+            <h5>About the Authors</h5>
+              <ul>
+                <li>Aidan Buie - PhD Student, Earth and Planetary Science, UNM - <a href="mailto:acbuie97@unm.edu">acbuie97@unm.edu</a></li>
+                <li>Zach Strasberg - PhD Student, Earth and Planetary Science, UNM - <a href="mailto:zstrasberg@unm.edu">zstrasberg@unm.edu</a></li>
+              </ul>
             <h5>About the Data</h5>
             <p>
               This web app displays the Martian crater database compiled by
@@ -67,10 +72,9 @@
             <p>
               Filters are provided on the left hand side. Numeric data can be
               filtered by clamping with a range slider. Classification data
-              can filtered via text input. Eventually, all valid inputs will
-              be provided and selectable with small pie charts. Once the
+              can filtered via pie charts. Once the
               filters are set, they can be applied by clicking the "Update
-              Filter" button.
+              Filter" button. Filters can be reset by reloading the page or clicking the "Reset Filter" button.
             </p>
             <p>
               The map and table update to show craters that match the selected
