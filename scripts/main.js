@@ -48,6 +48,13 @@ d3.csv("data/sample.csv", d3.autoType).then((data) => {
       }
     });
   });
+
+  data.forEach((row) => {
+    if (row.LAT_ELLI_IMG === undefined || row.LAT_ELLI_IMG === null || row.LON_ELLI_IMG === null || row.LON_ELLI_IMG === undefined) {
+      console.log(row.CRATER_ID, "has missing lat/lon");
+    }
+  });
+
   // Crossfilter + DC setup
   const ndx = crossfilter(data);
   const allDims = ndx.dimension((d) => d);
@@ -56,7 +63,7 @@ d3.csv("data/sample.csv", d3.autoType).then((data) => {
   let filteredData = filterAllDims(ndx);
 
   // TEMPORARY: Work with 10k rows instead of 1k rows to test out performance on larger dataset
-  filteredData = filteredData.slice(0, 10000);
+  // filteredData = filteredData.slice(0, 10000);
 
   // Sort largest to smallest so small craters appear on top
   filteredData.sort(
