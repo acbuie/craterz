@@ -50,7 +50,12 @@ d3.csv("data/sample.csv", d3.autoType).then((data) => {
   });
 
   data.forEach((row) => {
-    if (row.LAT_ELLI_IMG === undefined || row.LAT_ELLI_IMG === null || row.LON_ELLI_IMG === null || row.LON_ELLI_IMG === undefined) {
+    if (
+      row.LAT_ELLI_IMG === undefined ||
+      row.LAT_ELLI_IMG === null ||
+      row.LON_ELLI_IMG === null ||
+      row.LON_ELLI_IMG === undefined
+    ) {
       console.log(row.CRATER_ID, "has missing lat/lon");
     }
   });

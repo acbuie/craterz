@@ -1,341 +1,474 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpage Layout with Leaflet</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="libraries/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="libraries/dc-4.2.4/dc.min.css" />
+    <link rel="stylesheet" href="libraries/bootstrap-3.4.1/bootstrap.min.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Webpage Layout with Leaflet</title>
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="libraries/leaflet/leaflet.css" />
-  <link rel="stylesheet" href="libraries/dc-4.2.4/dc.min.css" />
-  <link rel="stylesheet" href="libraries/bootstrap-3.4.1/bootstrap.min.css" />
+    <link href="libraries/nouislider/nouislider.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/global.css" />
+    <script src="libraries/d3-v5/d3.v5.min.js"></script>
+    <script src="libraries/crossfilter2-1.5.4/crossfilter.min.js"></script>
+    <script src="libraries/dc-4.2.4/dc.min.js"></script>
+    <script src="libraries/leaflet/leaflet.js"></script>
+    <script src="libraries/leaflet/l.ellipse.js"></script>
+    <script src="libraries/nouislider/nouislider.min.js"></script>
+    <script src="libraries/jquery-3.4.1/jquery.min.js"></script>
+    <script src="libraries/bootstrap-3.4.1/bootstrap.min.js"></script>
+  </head>
 
-  <link href="libraries/nouislider/nouislider.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles/global.css" />
-  <script src="libraries/d3-v5/d3.v5.min.js"></script>
-  <script src="libraries/crossfilter2-1.5.4/crossfilter.min.js"></script>
-  <script src="libraries/dc-4.2.4/dc.min.js"></script>
-  <script src="libraries/leaflet/leaflet.js"></script>
-  <script src="libraries/leaflet/l.ellipse.js"></script>
-  <script src="libraries/nouislider/nouislider.min.js"></script>
-  <script src="libraries/jquery-3.4.1/jquery.min.js"></script>
-  <script src="libraries/bootstrap-3.4.1/bootstrap.min.js"></script>
-</head>
+  <body>
+    <div id="title">Mars Global Crater Database</div>
+    <div id="button-container">
+      <button
+        type="button"
+        id="modal-button"
+        class="btn btn-info small-btn"
+        data-toggle="modal"
+        data-target="#myModal_lg"
+      >
+        Click here to learn more about this web app!
+      </button>
 
-<body>
-  <div id="title">Mars Global Crater Database</div>
-  <div id="button-container">
-    <button type="button" id="modal-button" class="btn btn-info small-btn" data-toggle="modal" data-target="#myModal_lg">
-      Click here to learn more about this web app!
-    </button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal_lg" role="dialog">
-      <!-- Large Modal -->
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-              &times;
-            </button>
-            <h4 class="modal-title">About This Web App</h4>
-          </div>
-          <div class="modal-body">
-            <h5>About the Authors</h5>
+      <!-- Modal -->
+      <div class="modal fade" id="myModal_lg" role="dialog">
+        <!-- Large Modal -->
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+              <h4 class="modal-title">About This Web App</h4>
+            </div>
+            <div class="modal-body">
+              <h5>About the Authors</h5>
               <ul>
-                <li>Aidan Buie - PhD Student, Earth and Planetary Science, UNM - <a href="mailto:acbuie97@unm.edu">acbuie97@unm.edu</a></li>
-                <li>Zach Strasberg - PhD Student, Earth and Planetary Science, UNM - <a href="mailto:zstrasberg@unm.edu">zstrasberg@unm.edu</a></li>
+                <li>
+                  Aidan Buie - PhD Student, Earth and Planetary Science, UNM -
+                  <a href="mailto:acbuie97@unm.edu">acbuie97@unm.edu</a>
+                </li>
+                <li>
+                  Zach Strasberg - PhD Student, Earth and Planetary Science, UNM
+                  - <a href="mailto:zstrasberg@unm.edu">zstrasberg@unm.edu</a>
+                </li>
               </ul>
-            <h5>About the Data</h5>
-            <p>
-              This web app displays the Martian crater database compiled by
-              Dr. Stuart Robbins and Dr. Brian Hynek. The initial publication
-              for this work can be found in the following paper:
-              <a href="https://doi.org/10.1029/2011JE003966" target="_blank">A new global database of Mars impact
-                craters ≥1 km: 1.
-                Database creation, properties, and parameters.</a>. The database has been updated several times, with
-              the most
-              recent iteration being available on
-              <a href="https://craters.sjrdesign.net/" target="_blank">Dr. Robbins' website</a>.
-            </p>
-            <p>
-              Users of this tool should be aware of the caveats of the Mars
-              crater database. These are discussed in a
-              <a href="http://www.planetarycraterconsortium.nau.edu/RobbinsPCC8.pdf" target="_blank">conference
-                abstract</a>
-              and summarized on Dr. Robbins' website. We present this search
-              tool without commentary on the quality of the database; it is
-              left to the user to decide if the database is good enough for
-              their usecase.
-            </p>
-            <h5>Usage</h5>
-            <p>
-              Filters are provided on the left hand side. Numeric data can be
-              filtered by clamping with a range slider. Classification data
-              can filtered via pie charts. Once the
-              filters are set, they can be applied by clicking the "Update
-              Filter" button. Filters can be reset by reloading the page or clicking the "Reset Filter" button.
-            </p>
-            <p>
-              The map and table update to show craters that match the selected
-              filter. Users may scroll on the table horizontally to see
-              additional columns and vertically to see additional rows. Only
-              25 rows are shown at a time for simplicity.
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="filter-container">
-    <div class="filter-group">
-      <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#shape-filters"
-        aria-expanded="false">
-        Shape
-      </button>
-      <div class="collapse" id="shape-filters">
-        <!-- <strong class="filter-header">Shape</strong> -->
-        <div class="filter-content">
-          <div class="filter-row">
-            Diameter (km)
-            <div class="slider" id="diameter-slider"></div>
-          </div>
-          <div class="filter-row">
-            Eccentricity
-            <div class="slider" id="eccen-slider"></div>
-          </div>
-          <div class="filter-row">
-            Ellipticity
-            <div class="slider" id="ellip-slider"></div>
-          </div>
-          <div class="filter-row">
-            Angle
-            <div class="slider" id="angle-slider"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="filter-group">
-      <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#ejecta-filters"
-        aria-expanded="false">
-        Ejecta
-      </button>
-      <div class="collapse" id="ejecta-filters">
-        <div class="filter-content">
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#LAY_NUMBER-pie"
-              aria-expanded="false">
-              Layers
-            </button>
-            <div class="collapse" id="LAY_NUMBER-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-LAY_NUMBER" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-LAY_NUMBER"></div>
-              </div>
+              <h5>About the Data</h5>
+              <p>
+                This web app displays the Martian crater database compiled by
+                Dr. Stuart Robbins and Dr. Brian Hynek. The initial publication
+                for this work can be found in the following paper:
+                <a href="https://doi.org/10.1029/2011JE003966" target="_blank"
+                  >A new global database of Mars impact craters ≥1 km: 1.
+                  Database creation, properties, and parameters.</a
+                >. The database has been updated several times, with the most
+                recent iteration being available on
+                <a href="https://craters.sjrdesign.net/" target="_blank"
+                  >Dr. Robbins' website</a
+                >.
+              </p>
+              <p>
+                Users of this tool should be aware of the caveats of the Mars
+                crater database. These are discussed in a
+                <a
+                  href="http://www.planetarycraterconsortium.nau.edu/RobbinsPCC8.pdf"
+                  target="_blank"
+                  >conference abstract</a
+                >
+                and summarized on Dr. Robbins' website. We present this search
+                tool without commentary on the quality of the database; it is
+                left to the user to decide if the database is good enough for
+                their usecase.
+              </p>
+              <h5>Usage</h5>
+              <p>
+                Filters are provided on the left hand side. Numeric data can be
+                filtered by clamping with a range slider. Classification data
+                can filtered via pie charts. Once the filters are set, they can
+                be applied by clicking the "Update Filter" button. Filters can
+                be reset by reloading the page or clicking the "Reset Filter"
+                button.
+              </p>
+              <p>
+                The map and table update to show craters that match the selected
+                filter. Users may scroll on the table horizontally to see
+                additional columns and vertically to see additional rows. Only
+                25 rows are shown at a time for simplicity.
+              </p>
             </div>
-          </div>
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#LAY_MORPH1-pie"
-              aria-expanded="false">
-              Classification
-            </button>
-            <div class="collapse" id="LAY_MORPH1-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-LAY_MORPH1" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-LAY_MORPH1"></div>
-              </div>
-            </div>
-          </div>
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#LAY_MORPH2-pie"
-              aria-expanded="false">
-              Texture
-            </button>
-            <div class="collapse" id="LAY_MORPH2-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-LAY_MORPH2" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-LAY_MORPH2"></div>
-              </div>
-            </div>
-          </div>
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#LAY_MORPH3-pie"
-              aria-expanded="false">
-              Shape
-            </button>
-            <div class="collapse" id="LAY_MORPH3-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-LAY_MORPH3" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-LAY_MORPH3"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="filter-group">
-      <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#interior-filters"
-        aria-expanded="false">
-        Interior
-      </button>
-      <div class="collapse" id="interior-filters">
-        <div class="filter-content">
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#INT_MORPH1-pie"
-              aria-expanded="false">
-              Classification
-            </button>
-            <div class="collapse" id="INT_MORPH1-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-INT_MORPH1" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-INT_MORPH1"></div>
-              </div>
-            </div>
-          </div>
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#INT_MORPH2-pie"
-              aria-expanded="false">
-              Wall Morphology
-            </button>
-            <div class="collapse" id="INT_MORPH2-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-INT_MORPH2" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-INT_MORPH2"></div>
-              </div>
-            </div>
-          </div>
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#INT_MORPH3-pie"
-              aria-expanded="false">
-              Floor Morphology
-            </button>
-            <div class="collapse" id="INT_MORPH3-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-INT_MORPH3" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-INT_MORPH3"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="filter-group">
-      <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#degradation-filters"
-        aria-expanded="false">
-        Degradation
-      </button>
-      <div class="collapse" id="degradation-filters">
-        <div class="filter-content">
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#DEG_RIM-pie"
-              aria-expanded="false">
-              Rim
-            </button>
-            <div class="collapse" id="DEG_RIM-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-DEG_RIM" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-DEG_RIM"></div>
-              </div>
-            </div>
-          </div>
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#DEG_EJC-pie"
-              aria-expanded="false">
-              Ejecta
-            </button>
-            <div class="collapse" id="DEG_EJC-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-DEG_EJC" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-DEG_EJC"></div>
-              </div>
-            </div>
-          </div>
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#DEG_FLR-pie"
-              aria-expanded="false">
-              Floor
-            </button>
-            <div class="collapse" id="DEG_FLR-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-DEG_FLR" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-DEG_FLR"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="filter-group">
-      <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#misc-filters"
-        aria-expanded="false">
-        Misc
-      </button>
-      <div class="collapse" id="misc-filters">
-        <div class="filter-content">
-          <div class="filter-subgroup">
-            <button class="filter-toggle" type="button" data-toggle="collapse" data-target="#CONF-pie"
-              aria-expanded="false">
-              Confidence
-            </button>
-            <div class="collapse" id="CONF-pie">
-              <div class="filter-row">
-                <div id="pie-chart-container-CONF" class="pie-chart-container"></div>
-                <div id="pie-chart-legend-CONF"></div>
-              </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="button-row">
-      <button id="filter-update" class="btn btn-info small-btn" type="submit">
-        Update Filter
-      </button>
-      <button id="filter-reset" class="btn btn-info small-btn" type="submit">
-        Reset Filter
-      </button>
-    </div>
-    <div class="button-row">
-      <button id="download-csv" class="btn btn-info small-btn">
-        Download Filtered Data
-      </button>
-    </div>
-  </div>
-
-  <div id="map-container">
-    <div id="map"></div>
-  </div>
-
-  <div id="table-container">
-    <div id="pagination">
-      <div>
-        <button id="prev">Previous</button>
-        <span id="page-info"></span>
-        <button id="next">Next</button>
+    <div id="filter-container">
+      <div class="filter-group">
+        <button
+          class="filter-toggle"
+          type="button"
+          data-toggle="collapse"
+          data-target="#shape-filters"
+          aria-expanded="false"
+        >
+          Shape
+        </button>
+        <div class="collapse" id="shape-filters">
+          <!-- <strong class="filter-header">Shape</strong> -->
+          <div class="filter-content">
+            <div class="filter-row">
+              Diameter (km)
+              <div class="slider" id="diameter-slider"></div>
+            </div>
+            <div class="filter-row">
+              Eccentricity
+              <div class="slider" id="eccen-slider"></div>
+            </div>
+            <div class="filter-row">
+              Ellipticity
+              <div class="slider" id="ellip-slider"></div>
+            </div>
+            <div class="filter-row">
+              Angle
+              <div class="slider" id="angle-slider"></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <h5>
-        <i>
-          Scroll horizontally and vertically to view whole table, click on a
-          row to zoom to crater
-        </i>
-      </h5>
+      <div class="filter-group">
+        <button
+          class="filter-toggle"
+          type="button"
+          data-toggle="collapse"
+          data-target="#ejecta-filters"
+          aria-expanded="false"
+        >
+          Ejecta
+        </button>
+        <div class="collapse" id="ejecta-filters">
+          <div class="filter-content">
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#LAY_NUMBER-pie"
+                aria-expanded="false"
+              >
+                Layers
+              </button>
+              <div class="collapse" id="LAY_NUMBER-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-LAY_NUMBER"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-LAY_NUMBER"></div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#LAY_MORPH1-pie"
+                aria-expanded="false"
+              >
+                Classification
+              </button>
+              <div class="collapse" id="LAY_MORPH1-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-LAY_MORPH1"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-LAY_MORPH1"></div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#LAY_MORPH2-pie"
+                aria-expanded="false"
+              >
+                Texture
+              </button>
+              <div class="collapse" id="LAY_MORPH2-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-LAY_MORPH2"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-LAY_MORPH2"></div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#LAY_MORPH3-pie"
+                aria-expanded="false"
+              >
+                Shape
+              </button>
+              <div class="collapse" id="LAY_MORPH3-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-LAY_MORPH3"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-LAY_MORPH3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <button
+          class="filter-toggle"
+          type="button"
+          data-toggle="collapse"
+          data-target="#interior-filters"
+          aria-expanded="false"
+        >
+          Interior
+        </button>
+        <div class="collapse" id="interior-filters">
+          <div class="filter-content">
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#INT_MORPH1-pie"
+                aria-expanded="false"
+              >
+                Classification
+              </button>
+              <div class="collapse" id="INT_MORPH1-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-INT_MORPH1"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-INT_MORPH1"></div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#INT_MORPH2-pie"
+                aria-expanded="false"
+              >
+                Wall Morphology
+              </button>
+              <div class="collapse" id="INT_MORPH2-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-INT_MORPH2"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-INT_MORPH2"></div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#INT_MORPH3-pie"
+                aria-expanded="false"
+              >
+                Floor Morphology
+              </button>
+              <div class="collapse" id="INT_MORPH3-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-INT_MORPH3"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-INT_MORPH3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <button
+          class="filter-toggle"
+          type="button"
+          data-toggle="collapse"
+          data-target="#degradation-filters"
+          aria-expanded="false"
+        >
+          Degradation
+        </button>
+        <div class="collapse" id="degradation-filters">
+          <div class="filter-content">
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#DEG_RIM-pie"
+                aria-expanded="false"
+              >
+                Rim
+              </button>
+              <div class="collapse" id="DEG_RIM-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-DEG_RIM"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-DEG_RIM"></div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#DEG_EJC-pie"
+                aria-expanded="false"
+              >
+                Ejecta
+              </button>
+              <div class="collapse" id="DEG_EJC-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-DEG_EJC"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-DEG_EJC"></div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#DEG_FLR-pie"
+                aria-expanded="false"
+              >
+                Floor
+              </button>
+              <div class="collapse" id="DEG_FLR-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-DEG_FLR"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-DEG_FLR"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <button
+          class="filter-toggle"
+          type="button"
+          data-toggle="collapse"
+          data-target="#misc-filters"
+          aria-expanded="false"
+        >
+          Misc
+        </button>
+        <div class="collapse" id="misc-filters">
+          <div class="filter-content">
+            <div class="filter-subgroup">
+              <button
+                class="filter-toggle"
+                type="button"
+                data-toggle="collapse"
+                data-target="#CONF-pie"
+                aria-expanded="false"
+              >
+                Confidence
+              </button>
+              <div class="collapse" id="CONF-pie">
+                <div class="filter-row">
+                  <div
+                    id="pie-chart-container-CONF"
+                    class="pie-chart-container"
+                  ></div>
+                  <div id="pie-chart-legend-CONF"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button id="filter-update" class="btn btn-info small-btn" type="submit">
+          Update Filter
+        </button>
+        <button id="filter-reset" class="btn btn-info small-btn" type="submit">
+          Reset Filter
+        </button>
+      </div>
+      <div class="button-row">
+        <button id="download-csv" class="btn btn-info small-btn">
+          Download Filtered Data
+        </button>
+      </div>
     </div>
-    <table class="dc-data-table" id="table"></table>
-  </div>
 
-  <!-- <div id="chart">Charts</div> -->
-  <!-- These should be loaded last -->
-  <!-- <script src="scripts/utils.js"></script> -->
-  <!-- <script src="scripts/slider.js"></script> -->
-  <!-- <script src="scripts/filter.js"></script> -->
-  <script type="module" src="scripts/main.js"></script>
-</body>
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
 
+    <div id="table-container">
+      <div id="pagination">
+        <div>
+          <button id="prev">Previous</button>
+          <span id="page-info"></span>
+          <button id="next">Next</button>
+        </div>
+        <h5>
+          <i>
+            Scroll horizontally and vertically to view whole table, click on a
+            row to zoom to crater
+          </i>
+        </h5>
+      </div>
+      <table class="dc-data-table" id="table"></table>
+    </div>
+
+    <!-- <div id="chart">Charts</div> -->
+    <!-- These should be loaded last -->
+    <!-- <script src="scripts/utils.js"></script> -->
+    <!-- <script src="scripts/slider.js"></script> -->
+    <!-- <script src="scripts/filter.js"></script> -->
+    <script type="module" src="scripts/main.js"></script>
+  </body>
 </html>

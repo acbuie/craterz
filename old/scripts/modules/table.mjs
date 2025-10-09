@@ -41,7 +41,6 @@ function updatePage(pageData, dataWrapper) {
   // Display all dimensions
   dataWrapper.allDims.filterFunction((d) => tableData.includes(d));
 
-
   // Location within table
   const pageText = `Showing rows ${offset + 1}–${offset + pageData.size} out of ${pageData.rows}`;
   document.getElementById("page-info").textContent = pageText;
@@ -50,9 +49,10 @@ function updatePage(pageData, dataWrapper) {
   document.getElementById("next").disabled = pageData.index + 1 >= totalPages;
   document.getElementById("prev").disabled = pageData.index === 0;
 
-
   // Scroll table to top-left after every page change
-  document.getElementById("table-container").scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  document
+    .getElementById("table-container")
+    .scrollTo({ top: 0, left: 0, behavior: "smooth" });
   dc.redrawAll();
 }
 

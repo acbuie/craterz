@@ -16,19 +16,19 @@ function flatten(obj) {
 // Explode a column into multiple rows based on a separator
 // Use case: Columns that have multiple types, like INT_MORPH3
 function explodeColumn(data, key, separator = " / ") {
-  return data.flatMap(row => {
+  return data.flatMap((row) => {
     const raw = row[key];
     const rawStr = raw !== undefined && raw !== null ? raw.toString() : "";
     const parts = rawStr
-      ? rawStr.split(separator).map(s => s.trim())
+      ? rawStr.split(separator).map((s) => s.trim())
       : ["NA"];
-    return parts.map(part => ({ ...row, [key]: part }));
+    return parts.map((part) => ({ ...row, [key]: part }));
   });
 }
 
 function standardizeMissingValues(data, keys, NA_name = "NA") {
-  data.forEach(row => {
-    keys.forEach(key => {
+  data.forEach((row) => {
+    keys.forEach((key) => {
       if (row[key] === undefined || row[key] === null || row[key] === "") {
         row[key] = NA_name;
       }
@@ -36,4 +36,4 @@ function standardizeMissingValues(data, keys, NA_name = "NA") {
   });
 }
 
-export { flatten , explodeColumn, standardizeMissingValues };
+export { flatten, explodeColumn, standardizeMissingValues };
