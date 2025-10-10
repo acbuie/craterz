@@ -13,6 +13,8 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 
+import { UpdateFilterCard } from "@/components/sidebar/export";
+
 const items = [
   {
     title: "Home",
@@ -63,7 +65,9 @@ export function AppSidebar() {
           <SidebarGroupContent></SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <UpdateFilterCard />
+      </SidebarFooter>
     </Sidebar>
   );
 }
