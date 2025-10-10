@@ -1,73 +1,96 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Bubbles, CircleDotDashed, Diameter, Ellipsis } from "lucide-react";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar";
+import { Sidebar } from "@/components/ui/sidebar";
 
-import { UpdateFilterCard } from "@/components/sidebar/export";
+import { FilterHeader } from "@/components/sidebar/header";
+import { FilterMenu } from "@/components/sidebar/menu";
+import { FilterFooter } from "@/components/sidebar/footer";
 
-const items = [
+const filters = [
   {
-    title: "Home",
-    url: "#",
-    icon: Home,
+    title: "Geometry",
+    icon: Diameter,
+    items: [
+      {
+        title: "Diameter",
+        query: "#",
+      },
+      {
+        title: "Eccentricity",
+        query: "#",
+      },
+      {
+        title: "Ellipticity",
+        query: "#",
+      },
+      {
+        title: "Angle (from N)",
+        query: "#",
+      },
+    ],
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "Ejecta",
+    icon: Bubbles,
+    items: [
+      {
+        title: "Classification",
+        query: "#",
+      },
+      {
+        title: "Layers",
+        query: "#",
+      },
+      {
+        title: "Texture",
+        query: "#",
+      },
+      {
+        title: "Shape",
+        query: "#",
+      },
+    ],
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Interior",
+    icon: CircleDotDashed,
+    items: [
+      {
+        title: "Classification",
+        query: "#",
+      },
+      {
+        title: "Wall Morphology",
+        query: "#",
+      },
+      {
+        title: "Floor Morphology",
+        query: "#",
+      },
+    ],
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Miscellaneous",
+    icon: Ellipsis,
+    items: [
+      {
+        title: "Confidence",
+        query: "#",
+      },
+      {
+        title: "Notes",
+        query: "#",
+      },
+    ],
   },
 ];
 
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader>Filters</SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarMenu>
-            {items.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-          <SidebarGroupContent></SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <UpdateFilterCard />
-      </SidebarFooter>
+      <FilterHeader />
+      <FilterMenu filters={filters} />
+      <FilterFooter />
     </Sidebar>
   );
 }
