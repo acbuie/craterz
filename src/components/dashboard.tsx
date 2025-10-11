@@ -1,12 +1,15 @@
 export function AppDashboard() {
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4">
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="bg-blue-50 aspect-video rounded-xl" />
-        <div className="bg-blue-50 aspect-video rounded-xl" />
-        <div className="bg-blue-50 aspect-video rounded-xl" />
+    <div className="grid grid-cols-1 md:grid-cols-12 grid-rows-12 gap-2 p-2 h-full">
+      <div className="md:col-span-4 row-span-6 bg-accent rounded-lg">
+        <div className="flex justify-center items-center h-full">Chart</div>
       </div>
-      <div className="bg-blue-50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
-    </main>
+      <div className="md:col-span-8 row-span-6 bg-accent rounded-lg">
+        <div className="flex justify-center items-center h-full">Map</div>
+      </div>
+      <div className="md:col-span-12 row-span-6 bg-accent rounded-lg">
+        <div className="flex justify-center items-center h-full">Table</div>
+      </div>
+    </div>
   );
 }
