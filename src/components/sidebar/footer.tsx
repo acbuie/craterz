@@ -18,7 +18,7 @@ import {
 export function FilterFooter() {
   return (
     <SidebarFooter>
-      <Card>
+      <Card className="rounded-md">
         <CardHeader className="flex justify-center">
           <CardTitle>Search Craters</CardTitle>
           <Tooltip delayDuration={500}>
