@@ -9,10 +9,8 @@ export function AppDashboard() {
       <div className="md:col-span-8 row-span-6 bg-accent rounded-md">
         <div className="flex justify-center items-center h-full">Map</div>
       </div>
-      <div className="md:col-span-12 row-span-6 rounded-md">
-        <div className="flex justify-center items-center h-full">
-          <AppTable />
-        </div>
+      <div className="md:col-span-12 row-span-6">
+        <AppTable />
       </div>
     </div>
   );
