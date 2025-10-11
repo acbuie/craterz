@@ -21,7 +21,7 @@ export function FilterFooter() {
       <Card>
         <CardHeader className="flex justify-center">
           <CardTitle>Search Craters</CardTitle>
-          <Tooltip>
+          <Tooltip delayDuration={500}>
             <TooltipTrigger asChild>
               <Info className="size-4" />
             </TooltipTrigger>

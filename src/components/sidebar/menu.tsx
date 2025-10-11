@@ -4,6 +4,7 @@ import {
   CircleDotDashed,
   Diameter,
   Ellipsis,
+  Info,
   type LucideIcon,
 } from "lucide-react";
 
@@ -37,6 +38,7 @@ interface SidebarItem {
   icon: LucideIcon;
   items: {
     title: string;
+    help?: string;
     component?: Component;
     props?: Props;
   }[];
@@ -61,6 +63,7 @@ const filters: SidebarItems = [
       },
       {
         title: "Eccentricity",
+        help: "Defined as the square root of 1 minus the ratio of the squares of the major and minor axes.",
         component: GeometrySlider,
         props: {
           defaultValue: { min: 0, max: 1 },
@@ -71,6 +74,7 @@ const filters: SidebarItems = [
       },
       {
         title: "Flattening (Ellipticity)",
+        help: "Defined as the ratio of the difference between the major and minor axes and the minor axis.",
         component: GeometrySlider,
         props: {
           defaultValue: { min: 0, max: 1 },
@@ -81,6 +85,7 @@ const filters: SidebarItems = [
       },
       {
         title: "Angle",
+        help: "Defined as the angle, in degrees, from North travelling clockwise.",
         component: GeometrySlider,
         props: {
           defaultValue: { min: 0, max: 180 },
@@ -176,6 +181,16 @@ export function FilterMenu() {
                         >
                           <span className="flex items-center text-sm md:text-md">
                             {item.title}
+                            {item.help && (
+                              <Tooltip delayDuration={750}>
+                                <TooltipTrigger asChild>
+                                  <Info className="ml-1 size-3.25" />
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-[20rem]">
+                                  {item.help}
+                                </TooltipContent>
+                              </Tooltip>
+                            )}
                             {/* NOTE: Same color and size as SidebarMenuSub border  */}
                             <span className="flex grow bg-sidebar-border h-0.25 ml-2" />
                           </span>
