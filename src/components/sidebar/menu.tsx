@@ -21,14 +21,25 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Slider } from "../ui/slider";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-type Props = React.ComponentPropsWithoutRef<typeof Slider>;
+import { GeometrySlider, type GeometrySliderProps } from "./filters/slider";
+
+type Props = GeometrySliderProps;
+type Component = typeof GeometrySlider;
 
 interface SidebarItem {
   title: string;
   icon: LucideIcon;
-  items: { title: string; component?: React.ElementType; props?: Props }[];
+  items: {
+    title: string;
+    component?: Component;
+    props?: Props;
+  }[];
 }
 
 interface SidebarItems extends Array<SidebarItem> {}
@@ -40,20 +51,43 @@ const filters: SidebarItems = [
     items: [
       {
         title: "Diameter",
-        component: Slider,
-        props: { defaultValue: [10, 80] },
+        component: GeometrySlider,
+        props: {
+          defaultValue: { min: 100, max: 500 },
+          min: 1,
+          max: 1000,
+          step: 1,
+        },
       },
       {
         title: "Eccentricity",
-        // component: "#",
+        component: GeometrySlider,
+        props: {
+          defaultValue: { min: 0, max: 1 },
+          min: 0,
+          max: 1,
+          step: 0.01,
+        },
       },
       {
-        title: "Ellipticity",
-        // component: "#",
+        title: "Flattening (Ellipticity)",
+        component: GeometrySlider,
+        props: {
+          defaultValue: { min: 0, max: 1 },
+          min: 0,
+          max: 10,
+          step: 0.1,
+        },
       },
       {
-        title: "Angle (from N)",
-        // component: "#",
+        title: "Angle",
+        component: GeometrySlider,
+        props: {
+          defaultValue: { min: 0, max: 180 },
+          min: 0,
+          max: 180,
+          step: 0.5,
+        },
       },
     ],
   },
@@ -146,7 +180,8 @@ export function FilterMenu() {
                             <span className="flex grow bg-sidebar-border h-0.25 ml-2" />
                           </span>
                           <div>
-                            {item.component && (
+                            {/* Ensure both component and props are defined to make typechecker happy */}
+                            {item.component && item.props && (
                               <item.component {...item.props} />
                             )}
                           </div>
