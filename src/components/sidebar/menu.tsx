@@ -1,4 +1,11 @@
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import {
+  Bubbles,
+  ChevronRight,
+  CircleDotDashed,
+  Diameter,
+  Ellipsis,
+  type LucideIcon,
+} from "lucide-react";
 
 import {
   SidebarContent,
@@ -14,16 +21,99 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { Slider } from "../ui/slider";
 
-interface Filter {
-  filters: {
-    title: string;
-    icon?: LucideIcon;
-    items: { title: string; query: string }[];
-  }[];
+type Props = React.ComponentPropsWithoutRef<typeof Slider>;
+
+interface SidebarItem {
+  title: string;
+  icon: LucideIcon;
+  items: { title: string; component?: React.ElementType; props?: Props }[];
 }
 
-export function FilterMenu({ filters }: Filter) {
+interface SidebarItems extends Array<SidebarItem> {}
+
+const filters: SidebarItems = [
+  {
+    title: "Geometry",
+    icon: Diameter,
+    items: [
+      {
+        title: "Diameter",
+        component: Slider,
+        props: { defaultValue: [10, 80] },
+      },
+      {
+        title: "Eccentricity",
+        // component: "#",
+      },
+      {
+        title: "Ellipticity",
+        // component: "#",
+      },
+      {
+        title: "Angle (from N)",
+        // component: "#",
+      },
+    ],
+  },
+  {
+    title: "Ejecta",
+    icon: Bubbles,
+    items: [
+      {
+        title: "Classification",
+        // component: "#",
+      },
+      {
+        title: "Layers",
+        // component: "#",
+      },
+      {
+        title: "Rexture",
+        // component: "#",
+      },
+      {
+        title: "Shape",
+        // component: "#",
+      },
+    ],
+  },
+  {
+    title: "Interior",
+    icon: CircleDotDashed,
+    items: [
+      {
+        title: "Classification",
+        // component: "#",
+      },
+      {
+        title: "Wall Morphology",
+        // component: "#",
+      },
+      {
+        title: "Floor Morphology",
+        // component: "#",
+      },
+    ],
+  },
+  {
+    title: "Miscellaneous",
+    icon: Ellipsis,
+    items: [
+      {
+        title: "Confidence",
+        // component: "#",
+      },
+      {
+        title: "Notes",
+        // component: "#",
+      },
+    ],
+  },
+];
+
+export function FilterMenu() {
   return (
     <SidebarContent className="gap-0">
       <SidebarGroup>
@@ -37,7 +127,7 @@ export function FilterMenu({ filters }: Filter) {
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton className="font-medium">
-                    {item.icon && <item.icon />}
+                    {<item.icon />}
                     {item.title}
                     <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
@@ -48,9 +138,18 @@ export function FilterMenu({ filters }: Filter) {
                       {item.items.map((item) => (
                         <SidebarMenuSubItem
                           key={item.title}
-                          className="text-sm md:text-md"
+                          className="flex flex-col"
                         >
-                          {item.title}
+                          <span className="flex items-center text-sm md:text-md">
+                            {item.title}
+                            {/* NOTE: Same color and size as SidebarMenuSub border  */}
+                            <span className="flex grow bg-sidebar-border h-0.25 ml-2" />
+                          </span>
+                          <div>
+                            {item.component && (
+                              <item.component {...item.props} />
+                            )}
+                          </div>
                         </SidebarMenuSubItem>
                       ))}
                     </SidebarMenuSub>
