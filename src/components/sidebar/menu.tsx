@@ -44,7 +44,7 @@ interface SidebarItem {
   }[];
 }
 
-interface SidebarItems extends Array<SidebarItem> {}
+type SidebarItems = Array<SidebarItem>;
 
 const filters: SidebarItems = [
   {
