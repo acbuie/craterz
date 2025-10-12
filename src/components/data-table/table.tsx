@@ -1,5 +1,7 @@
 "use client";
 
+import * as React from "react";
+
 import {
   ChevronFirst,
   ChevronLeft,
@@ -9,13 +11,17 @@ import {
 
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -24,8 +30,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -43,18 +47,38 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = React.useState({});
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      rowSelection,
+    },
   });
 
   return (
-    <div className="overflow-hidden min-h-full min-w-full rounded-md border flex flex-col bg-accent">
-      <div className="grow border-b-1 bg-background">
+    <div className="overflow-hidden min-h-full rounded-md border flex flex-col bg-accent">
+      <div className="h-8 m-2 flex items-center gap-x-2">
+        Export
+        {/* TODO: Replace with Select component */}
+        <ButtonGroup>
+          <Button variant="outline">All</Button>
+          <Button variant="outline" disabled={true}>
+            Selected
+          </Button>
+        </ButtonGroup>
+      </div>
+      <div className="grow border-y-1 bg-background">
         <Table>
-          <TableHeader className="sticky top-0 z-10 bg-accent">
+          <TableHeader className="bg-sidebar">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
