@@ -11,3 +11,27 @@ This tool was developed as part of a school project but may see additional featu
 ## Stack
 
 This tool was built with leaflet.js, crossfilter.js, and D3.js.
+
+## Docker / Docker Compose
+
+This project can be run using Docker Compose.
+
+### Requirements
+- Docker
+- Docker Compose (v2)
+
+### Run the app
+```bash
+docker compose up
+````
+
+### Access
+
+Open your browser and go to:
+
+[http://localhost:5000](http://localhost:5000)
+
+The container runs a simple Flask app that serves `index.html`.
+
+```
+```
