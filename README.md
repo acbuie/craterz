@@ -40,8 +40,3 @@ Open your browser and go to:
 
 The container runs a simple Flask app that serves `index.html`.
 
-
-```
-
-
-
