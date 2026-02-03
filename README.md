@@ -12,8 +12,6 @@ This tool was developed as part of a school project but may see additional featu
 
 This tool was built with leaflet.js, crossfilter.js, and D3.js.
 
-```
-```
 ## Docker / Docker Compose
 
 This project can be run using Docker Compose.
@@ -44,5 +42,6 @@ The container runs a simple Flask app that serves `index.html`.
 
 
 ```
+
 
 
