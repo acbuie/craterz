@@ -4,3 +4,5 @@ services :
     image: useranonymous/craterz-main:0.0.1
     ports :
     - 5000:5000
+    volumes:
+      - ./data:/app/craterz-main/data
